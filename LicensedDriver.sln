@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LicensedDriver", "LicensedDriver.vcxproj", "{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Debug|x64.ActiveCfg = Debug|x64
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Debug|x64.Build.0 = Debug|x64
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Debug|x86.ActiveCfg = Debug|Win32
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Debug|x86.Build.0 = Debug|Win32
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Release|x64.ActiveCfg = Release|x64
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Release|x64.Build.0 = Release|x64
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Release|x86.ActiveCfg = Release|Win32
+		{5BDB7DAF-DEA7-44B6-8B13-00F0DEEC875B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE88AB9E-DBCB-4D9D-84D3-825D896FF293}
+	EndGlobalSection
+EndGlobal
