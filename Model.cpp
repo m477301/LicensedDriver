@@ -58,6 +58,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     vector<unsigned int> indices;
     vector<Texture> textures;
 
+
     // walk through each of the mesh's vertices
     for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -167,6 +168,26 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type,
     }
     return textures;
 }
+
+//Material Model::loadMaterial() {
+//    Material material;
+//    aiColor3D color(0.f, 0.f, 0.f);
+//    float shininess;
+//
+//    mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+//    material.Diffuse = glm::vec3(color.r, color.b, color.g);
+//
+//    mat->Get(AI_MATKEY_COLOR_AMBIENT, color);
+//    material.Ambient = glm::vec3(color.r, color.b, color.g);
+//
+//    mat->Get(AI_MATKEY_COLOR_SPECULAR, color);
+//    material.Specular = glm::vec3(color.r, color.b, color.g);
+//
+//    mat->Get(AI_MATKEY_SHININESS, shininess);
+//    material.Shininess = shininess;
+//
+//    return material;
+//}
 
 
 unsigned int TextureFromFile(const char* path, const string& directory, bool gamma)
