@@ -1,53 +1,48 @@
+/*******************************************************************
+** This code is part of Breakout.
+**
+** Breakout is free software: you can redistribute it and/or modify
+** it under the terms of the CC BY 4.0 license as published by
+** Creative Commons, either version 4 of the License, or (at your
+** option) any later version.
+******************************************************************/
 #ifndef SHADER_H
 #define SHADER_H
 
+#include <string>
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
+// General purpose shader object. Compiles from file, generates
+// compile/link-time error messages and hosts several utility 
+// functions for easy management.
 class Shader
 {
 public:
+    // state
     unsigned int ID;
-    // constructor Vertex, Geometry and Fragment Shader
-    // ------------------------------------------------------------------------
-    Shader(const char* vertexPath, const char* geometryPath, const char* fragmentPath);
-    // constructor Vertex and Fragment only
-    // ------------------------------------------------------------------------
-    Shader(const char* vertexPath, const char* fragmentPath);
-    // activate the shader
-    // ------------------------------------------------------------------------
-    void use() const;
-    // utility uniform functions
-    // ------------------------------------------------------------------------
-    void setBool(const std::string& name, bool value) const;
-    // ------------------------------------------------------------------------
-    void setInt(const std::string& name, int value) const;
-    // ------------------------------------------------------------------------
-    void setFloat(const std::string& name, float value) const;
-    // ------------------------------------------------------------------------
-    void setVec2(const std::string& name, const glm::vec2& value) const;
-    void setVec2(const std::string& name, float x, float y) const;
-    // ------------------------------------------------------------------------
-    void setVec3(const std::string& name, const glm::vec3& value) const;
-    void setVec3(const std::string& name, float x, float y, float z) const;
-    // ------------------------------------------------------------------------
-    void setVec4(const std::string& name, const glm::vec4& value) const;
-    void setVec4(const std::string& name, float x, float y, float z, float w) const;
-    // ------------------------------------------------------------------------
-    void setMat2(const std::string& name, const glm::mat2& mat) const;
-    // ------------------------------------------------------------------------
-    void setMat3(const std::string& name, const glm::mat3& mat) const;
-    // ------------------------------------------------------------------------
-    void setMat4(const std::string& name, const glm::mat4& mat) const;
-
+    // constructor
+    Shader() { }
+    // sets the current shader as active
+    Shader& Use();
+    // compiles the shader from given source code
+    void    Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource = nullptr); // note: geometry source code is optional 
+    // utility functions
+    void    SetFloat(const char* name, float value, bool useShader = false);
+    void    SetInteger(const char* name, int value, bool useShader = false);
+    void    SetVector2f(const char* name, float x, float y, bool useShader = false);
+    void    SetVector2f(const char* name, const glm::vec2& value, bool useShader = false);
+    void    SetVector3f(const char* name, float x, float y, float z, bool useShader = false);
+    void    SetVector3f(const char* name, const glm::vec3& value, bool useShader = false);
+    void    SetVector4f(const char* name, float x, float y, float z, float w, bool useShader = false);
+    void    SetVector4f(const char* name, const glm::vec4& value, bool useShader = false);
+    void    SetMatrix4(const char* name, const glm::mat4& matrix, bool useShader = false);
 private:
-    // utility function for checking shader compilation/linking errors.
-    // ------------------------------------------------------------------------
-    void checkCompileErrors(GLuint shader, std::string type);
+    // checks if compilation or linking failed and if so, print the error logs
+    void    checkCompileErrors(unsigned int object, std::string type);
 };
+
 #endif
