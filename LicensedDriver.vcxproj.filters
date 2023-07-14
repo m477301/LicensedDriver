@@ -45,6 +45,12 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game_Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite_Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="default_v.txt">
@@ -83,6 +89,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite_Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
