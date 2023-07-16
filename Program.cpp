@@ -14,19 +14,21 @@
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 unsigned int loadTexture(const char* path);
 
+// settings
+const unsigned int SCREEN_WIDTH = 800;
+const unsigned int SCREEN_HEIGHT = 600;
+
 // Setup Game
 Game LicensedDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-bool blinn = false;
-bool blinnKeyPressed = false;
+//bool blinn = false;
+//bool blinnKeyPressed = false;
 
 // timing
 float deltaTime = 0.0f;
@@ -48,7 +50,7 @@ int main(int argc, char* argv[])
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Breakout", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Licensed Driver", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     // tell GLFW to capture our mouse
@@ -63,6 +65,7 @@ int main(int argc, char* argv[])
     }
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
@@ -87,14 +90,14 @@ int main(int argc, char* argv[])
 
     // load models
 // -----------
-    Model ourModel("objects/car/CarC6_0003.obj");
+    //Model ourModel("objects/car/CarC6_0003.obj");
 
-    unsigned int floorTexture = loadTexture("objects/textures/road.jpg");
+    //unsigned int floorTexture = loadTexture("objects/textures/road.jpg");
 
     // shader configuration
     // --------------------
-    ourShader.use();
-    ourShader.setInt("texture1", 0);
+    //ourShader.use();
+    //ourShader.setInt("texture1", 0);
 
     // lighting info
 // -------------
@@ -117,7 +120,7 @@ int main(int argc, char* argv[])
 
         // manage user input
         // -----------------
-        LicensedDriver.ProcessInput(deltaTime);
+        LicensedDriver.KeyboardInput(deltaTime);
 
         // update game state
         // -----------------
@@ -130,7 +133,7 @@ int main(int argc, char* argv[])
         LicensedDriver.Render();
 
         // don't forget to enable shader before setting uniforms
-        ourShader.use();
+        //ourShader.use();
 
         //// set light uniforms
         //ourShader.setVec3("viewPos", camera.Position);
@@ -138,12 +141,12 @@ int main(int argc, char* argv[])
         //ourShader.setInt("blinn", blinn);
 
         // floor
-        glBindVertexArray(planeVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, floorTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //glBindVertexArray(planeVAO);
+        //glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, floorTexture);
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        std::cout << (blinn ? "Blinn-Phong" : "Phong") << std::endl;
+        //std::cout << (blinn ? "Blinn-Phong" : "Phong") << std::endl;
         
         //modelShader.use();
         //modelShader.setMat4("projection", projection);
@@ -166,8 +169,8 @@ int main(int argc, char* argv[])
     // ---------------------------------------------------------
     ResourceManager::Clear();
 
-    glDeleteVertexArrays(1, &planeVAO);
-    glDeleteBuffers(1, &planeVBO);
+    //glDeleteVertexArrays(1, &planeVAO);
+    //glDeleteBuffers(1, &planeVBO);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     //------------------------------------------------------------------
@@ -181,16 +184,6 @@ void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !blinnKeyPressed)
-    {
-        blinn = !blinn;
-        blinnKeyPressed = true;
-    }
-    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE)
-    {
-        blinnKeyPressed = false;
-    }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -202,34 +195,36 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+    // when a user presses the escape key, we set the WindowShouldClose property to true, closing the application
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            LicensedDriver.Keys[key] = true;
+        else if (action == GLFW_RELEASE)
+            LicensedDriver.Keys[key] = false;
+    }
+}
+
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
+
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
+    LicensedDriver.MouseInput(xpos, ypos);
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
+ //glfw: whenever the mouse scroll wheel scrolls, this callback is called
+ //----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+    LicensedDriver.ScrollInput(static_cast<float>(yoffset));
 }
 
 // utility function for loading a 2D texture from file

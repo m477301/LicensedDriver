@@ -13,36 +13,37 @@
 #include "Game_Object.h"
 
 // Game-related State data
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
-// Game-related State data
 SpriteRenderer* RoadRenderer;
-
+Camera* camera;
 
 Game::Game(unsigned int width, unsigned int height)
     : State(GAME_ACTIVE), Keys(), Width(width), Height(height)
 {
-
+    float lastX = width / 2.0f;
+    float lastY = height / 2.0f;
+    Camera camera;
 }
 
 Game::~Game()
 {
-    delete Renderer;
-    delete Player;
+    delete RoadRenderer;
+    delete camera;
+    //delete Player;
 }
 
 void Game::Init()
 {
+    // Setup Camera
+    camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
     // load shaders
     ResourceManager::LoadShader("default_v.txt", "default_f.txt", nullptr, "defaultShader");
     //ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
     // configure shaders
-    glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    glm::mat4 view = camera.GetViewMatrix();
-    ResourceManager::GetShader("defaultShader").Use().setMat4("projection", projection);
-    ResourceManager::GetShader("defaultShader").setMat4("view", view);
+    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)this->Width / (float)this->Height, 0.1f, 100.0f);
+    glm::mat4 view = camera->GetViewMatrix();
+    ResourceManager::GetShader("defaultShader").Use().SetMatrix4("projection", projection);
+    ResourceManager::GetShader("defaultShader").SetMatrix4("view", view);
     // set render-specific controls
     Shader myShader;
     myShader = ResourceManager::GetShader("defaultShader");
@@ -59,48 +60,66 @@ void Game::Update(float dt)
 
 }
 
-void Game::ProcessInput(float dt)
-{
-    if (this->State == GAME_ACTIVE)
-    {
-        float velocity = PLAYER_VELOCITY * dt;
-        // move playerboard
-        if (this->Keys[GLFW_KEY_A])
-        {
-            if (Player->Position.x >= 0.0f)
-                Player->Position.x -= velocity;
-        }
-        if (this->Keys[GLFW_KEY_D])
-        {
-            if (Player->Position.x <= this->Width - Player->Size.x)
-                Player->Position.x += velocity;
-        }
-        if (this->Keys[GLFW_KEY_ESCAPE])
-            glfwSetWindowShouldClose(window, true);
-
-        if (this->Keys[GLFW_KEY_W])
-            camera.ProcessKeyboard(FORWARD, deltaTime);
-        if (this->Keys[GLFW_KEY_S])
-            camera.ProcessKeyboard(BACKWARD, deltaTime);
-        if (this->Keys[GLFW_KEY_A])
-            camera.ProcessKeyboard(LEFT, deltaTime);
-        if (this->Keys[GLFW_KEY_D])
-            camera.ProcessKeyboard(RIGHT, deltaTime);
-    }
-}
-
 void Game::Render()
 {
     if (this->State == GAME_ACTIVE)
     {
+        // Camera Info
+        glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)this->Width / (float)this->Height, 0.1f, 100.0f);
+        glm::mat4 view = camera->GetViewMatrix();
+        ResourceManager::GetShader("defaultShader").Use().SetMatrix4("projection", projection);
+        ResourceManager::GetShader("defaultShader").SetMatrix4("view", view);
+
         // draw background
         //Renderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
         Texture2D myTexture;
         myTexture = ResourceManager::GetTexture("road");
-        Renderer->DrawSprite(myTexture, glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
+        RoadRenderer->DrawSprite(myTexture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
         // draw level
-        this->Levels[this->Level].Draw(*Renderer);
+        //this->Levels[this->Level].Draw(*Renderer);
         // draw player
-        Player->Draw(*Renderer);
+        //Player->Draw(*Renderer);
     }
+}
+
+void Game::KeyboardInput(float dt)
+{
+    if (this->State == GAME_ACTIVE)
+    {
+        // KEYBOARD
+        //std::cout << "ACTIVE" << std::endl;
+        if (this->Keys[GLFW_KEY_W])
+            camera->ProcessKeyboard(FORWARD, dt);
+        if (this->Keys[GLFW_KEY_S])
+            camera->ProcessKeyboard(BACKWARD, dt);
+        if (this->Keys[GLFW_KEY_A])
+            camera->ProcessKeyboard(LEFT, dt);
+        if (this->Keys[GLFW_KEY_D])
+            camera->ProcessKeyboard(RIGHT, dt);
+    }
+}
+
+void Game::MouseInput(float xpos, float ypos)
+{
+    if (this->State == GAME_ACTIVE)
+    {
+        if (firstMouse)
+        {
+            this->lastX = xpos;
+            this->lastY = ypos;
+            this->firstMouse = false;
+        }
+
+        float xoffset = xpos - this->lastX;
+        float yoffset = this->lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+        this->lastX = xpos;
+        this->lastY = ypos;
+
+        camera->ProcessMouseMovement(xoffset, yoffset);
+    }
+}
+
+void Game::ScrollInput(float yoffset) {
+    camera->ProcessMouseScroll(yoffset);
 }

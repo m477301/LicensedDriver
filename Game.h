@@ -1,11 +1,3 @@
-/*******************************************************************
-** This code is part of Breakout.
-**
-** Breakout is free software: you can redistribute it and/or modify
-** it under the terms of the CC BY 4.0 license as published by
-** Creative Commons, either version 4 of the License, or (at your
-** option) any later version.
-******************************************************************/
 #ifndef GAME_H
 #define GAME_H
 
@@ -13,6 +5,8 @@
 #include <GLFW/glfw3.h>
 
 //#include "Game_Level.h"
+#include <iostream>
+
 
 // Represents the current state of the game
 enum GameState {
@@ -22,7 +16,9 @@ enum GameState {
 };
 
 // Initial size of the player paddle
-const glm::vec2 ROAD_SIZE(100.0f, 100.0f,0.0f);
+//const glm::vec3 ROAD_SIZE(100.0f, 100.0f,0.0f);
+//const glm::vec2 PLAYER_SIZE(100.0f, 20.0f);
+
 // Initial velocity of the player paddle
 const float ROAD_VELOCITY(0.0f);
 
@@ -35,18 +31,21 @@ public:
     // game state
     GameState               State;
     bool                    Keys[1024];
-    unsigned int            Width, Height;
-    std::vector<GameLevel>  Levels;
-    unsigned int            Level;
+    unsigned int            Width, Height, Depth;
+    float lastX, lastY;
+    bool firstMouse = true;
     // constructor/destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
     // initialize game state (load all shaders/textures/levels)
     void Init();
     // game loop
-    void ProcessInput(float dt);
     void Update(float dt);
     void Render();
+    void KeyboardInput(float dt);
+    void MouseInput(float xpos, float ypose);
+    void ScrollInput(float yoffset);
+
 };
 
 #endif
