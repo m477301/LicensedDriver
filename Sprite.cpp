@@ -1,42 +1,34 @@
-/*******************************************************************
-** This code is part of Breakout.
-**
-** Breakout is free software: you can redistribute it and/or modify
-** it under the terms of the CC BY 4.0 license as published by
-** Creative Commons, either version 4 of the License, or (at your
-** option) any later version.
-******************************************************************/
-#include "Sprite_Renderer.h"
+#include "Sprite.h"
 
 
-SpriteRenderer::SpriteRenderer(Shader& shader)
+Sprite::Sprite(Shader& shader)
 {
     this->shader = shader;
     this->initRenderData();
 }
 
-SpriteRenderer::~SpriteRenderer()
+Sprite::~Sprite()
 {
-    glDeleteVertexArrays(1, &this->planeVAO);
-    glDeleteBuffers(1, &this->planeVBO);
+    glDeleteVertexArrays(1, &this->VAO);
+    glDeleteBuffers(1, &this->VBO);
 }
 
-void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec3 position, glm::vec3 size, float rotate, glm::vec3 color)
+void Sprite::DrawSprite(Texture2D& texture, glm::vec3 position, glm::vec3 size, float rotate, glm::vec3 color)
 {
     // prepare transformations
     this->shader.Use();
-    glBindVertexArray(planeVAO);
+    glBindVertexArray(VAO);
     glActiveTexture(GL_TEXTURE0);
     texture.Bind();
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
 
-void SpriteRenderer::initRenderData()
+void Sprite::initRenderData()
 {
     // set up vertex data (and buffer(s)) and configure vertex 
     // ------------------------------------------------------------------
-    float planeVertices[] = {
+    float vertices[] = {
         // positions            // normals         // texcoords
          10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
         -10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
@@ -47,11 +39,11 @@ void SpriteRenderer::initRenderData()
          10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
     };
     // plane VAO
-    glGenVertexArrays(1, &this->planeVAO);
-    glGenBuffers(1, &this->planeVBO);
-    glBindVertexArray(this->planeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &this->VAO);
+    glGenBuffers(1, &this->VBO);
+    glBindVertexArray(this->VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);

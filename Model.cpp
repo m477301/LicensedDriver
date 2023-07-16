@@ -1,16 +1,17 @@
 #include "Model.h"
 
 // constructor, expects a filepath to a 3D model.
-Model::Model(string const& path, bool gamma) : gammaCorrection(gamma)
+Model::Model(string const& path, Shader& Shader, bool gamma) : gammaCorrection(gamma)
 {
+    this->shader = shader;
     loadModel(path);
 }
 
 // draws the model, and thus all its meshes
-void Model::Draw(Shader& shader)
+void Model::Draw()
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].Draw(shader);
+        meshes[i].Draw(this->shader);
 }
 
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.

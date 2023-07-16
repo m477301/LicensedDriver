@@ -13,7 +13,7 @@
 #include <glm/glm.hpp>
 
 #include "Texture.h"
-#include "Sprite_Renderer.h"
+#include "Sprite.h"
 
 
 // Container object for holding all state relevant for a single
@@ -29,12 +29,12 @@ public:
     bool        IsSolid;
     bool        Destroyed;
     // render state
-    Texture2D   Sprite;
+    Texture2D   Object;
     // constructor(s)
     GameObject();
     GameObject(glm::vec3 pos, glm::vec3 size, Texture2D sprite, glm::vec3 color = glm::vec3(1.0f), glm::vec3 velocity = glm::vec3(0.0f, 0.0f, 0.0f));
     // draw sprite
-    virtual void Draw(SpriteRenderer& renderer);
+    virtual void Draw(Sprite& sprite);
 };
 
 #endif

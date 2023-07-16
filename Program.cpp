@@ -18,7 +18,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
-unsigned int loadTexture(const char* path);
 
 // settings
 const unsigned int SCREEN_WIDTH = 800;
@@ -26,9 +25,6 @@ const unsigned int SCREEN_HEIGHT = 600;
 
 // Setup Game
 Game LicensedDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-//bool blinn = false;
-//bool blinnKeyPressed = false;
 
 // timing
 float deltaTime = 0.0f;
@@ -85,19 +81,11 @@ int main(int argc, char* argv[])
 
     //// build and compile shaders
     //// -------------------------
-    //Shader ourShader("default_v.txt", "default_f.txt");
     //Shader modelShader("model_v.txt", "model_f.txt");
 
     // load models
 // -----------
     //Model ourModel("objects/car/CarC6_0003.obj");
-
-    //unsigned int floorTexture = loadTexture("objects/textures/road.jpg");
-
-    // shader configuration
-    // --------------------
-    //ourShader.use();
-    //ourShader.setInt("texture1", 0);
 
     // lighting info
 // -------------
@@ -132,21 +120,10 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         LicensedDriver.Render();
 
-        // don't forget to enable shader before setting uniforms
-        //ourShader.use();
-
         //// set light uniforms
         //ourShader.setVec3("viewPos", camera.Position);
         //ourShader.setVec3("lightPos", lightPos);
         //ourShader.setInt("blinn", blinn);
-
-        // floor
-        //glBindVertexArray(planeVAO);
-        //glActiveTexture(GL_TEXTURE0);
-        //glBindTexture(GL_TEXTURE_2D, floorTexture);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        //std::cout << (blinn ? "Blinn-Phong" : "Phong") << std::endl;
         
         //modelShader.use();
         //modelShader.setMat4("projection", projection);
@@ -225,43 +202,4 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     LicensedDriver.ScrollInput(static_cast<float>(yoffset));
-}
-
-// utility function for loading a 2D texture from file
-// ---------------------------------------------------
-unsigned int loadTexture(char const* path)
-{
-    unsigned int textureID;
-    glGenTextures(1, &textureID);
-
-    int width, height, nrComponents;
-    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
-    if (data)
-    {
-        GLenum format;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
-
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
-        stbi_image_free(data);
-    }
-
-    return textureID;
 }

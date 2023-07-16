@@ -9,12 +9,14 @@
 #include "Game.h"
 #include "Resource_Manager.h"
 #include "Camera.h"
-#include "Sprite_renderer.h"
+#include "Sprite.h"
 #include "Game_Object.h"
+#include "Model.h"
 
 // Game-related State data
-SpriteRenderer* RoadRenderer;
+Sprite* Road;
 Camera* camera;
+Model* Car;
 
 Game::Game(unsigned int width, unsigned int height)
     : State(GAME_ACTIVE), Keys(), Width(width), Height(height)
@@ -26,9 +28,8 @@ Game::Game(unsigned int width, unsigned int height)
 
 Game::~Game()
 {
-    delete RoadRenderer;
+    delete Road;
     delete camera;
-    //delete Player;
 }
 
 void Game::Init()
@@ -38,16 +39,13 @@ void Game::Init()
 
     // load shaders
     ResourceManager::LoadShader("default_v.txt", "default_f.txt", nullptr, "defaultShader");
-    //ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
-    // configure shaders
-    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)this->Width / (float)this->Height, 0.1f, 100.0f);
-    glm::mat4 view = camera->GetViewMatrix();
-    ResourceManager::GetShader("defaultShader").Use().SetMatrix4("projection", projection);
-    ResourceManager::GetShader("defaultShader").SetMatrix4("view", view);
+    ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
     // set render-specific controls
-    Shader myShader;
+    Shader myShader, modelShader;
     myShader = ResourceManager::GetShader("defaultShader");
-    RoadRenderer = new SpriteRenderer(myShader);
+    Road = new Sprite(myShader);
+    modelShader = ResourceManager::GetShader("modelShader");
+    Car = new Model("objects/car/CarC6_0003.obj", modelShader);
     // load textures
     ResourceManager::LoadTexture("textures/road.jpg", false, "road");
     // configure game objects
@@ -74,11 +72,16 @@ void Game::Render()
         //Renderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
         Texture2D myTexture;
         myTexture = ResourceManager::GetTexture("road");
-        RoadRenderer->DrawSprite(myTexture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
-        // draw level
-        //this->Levels[this->Level].Draw(*Renderer);
-        // draw player
-        //Player->Draw(*Renderer);
+        Road->DrawSprite(myTexture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
+
+        // Draw Model
+        ResourceManager::GetShader("modelShader").Use().SetMatrix4("projection", projection);
+        ResourceManager::GetShader("modelShader").SetMatrix4("view", view);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
+        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
+        Car->Draw();
     }
 }
 
