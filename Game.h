@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+
 //#include "Game_Level.h"
 #include <iostream>
 
@@ -14,6 +16,15 @@ enum GameState {
     GAME_MENU,
     GAME_WIN
 };
+
+enum Movement {
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT
+};
+
+const float YAW = -90.0f;
 
 // Initial size of the player paddle
 //const glm::vec3 ROAD_SIZE(100.0f, 100.0f,0.0f);

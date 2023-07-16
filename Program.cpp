@@ -79,14 +79,6 @@ int main(int argc, char* argv[])
     // ---------------
     LicensedDriver.Init();
 
-    //// build and compile shaders
-    //// -------------------------
-    //Shader modelShader("model_v.txt", "model_f.txt");
-
-    // load models
-// -----------
-    //Model ourModel("objects/car/CarC6_0003.obj");
-
     // lighting info
 // -------------
     glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
@@ -120,22 +112,6 @@ int main(int argc, char* argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         LicensedDriver.Render();
 
-        //// set light uniforms
-        //ourShader.setVec3("viewPos", camera.Position);
-        //ourShader.setVec3("lightPos", lightPos);
-        //ourShader.setInt("blinn", blinn);
-        
-        //modelShader.use();
-        //modelShader.setMat4("projection", projection);
-        //modelShader.setMat4("view", view);
-
-        //// render the loaded model
-        //glm::mat4 model = glm::mat4(1.0f);
-        //model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f)); // translate it down so it's at the center of the scene
-        //model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
-        //modelShader.setMat4("model", model);
-        //ourModel.Draw(modelShader);
-
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -145,9 +121,6 @@ int main(int argc, char* argv[])
     // delete all resources as loaded using the resource manager
     // ---------------------------------------------------------
     ResourceManager::Clear();
-
-    //glDeleteVertexArrays(1, &planeVAO);
-    //glDeleteBuffers(1, &planeVBO);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     //------------------------------------------------------------------

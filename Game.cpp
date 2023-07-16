@@ -16,7 +16,7 @@
 // Game-related State data
 Sprite* Road;
 Camera* camera;
-Model* Car;
+GameObject* Car;
 
 Game::Game(unsigned int width, unsigned int height)
     : State(GAME_ACTIVE), Keys(), Width(width), Height(height)
@@ -45,12 +45,10 @@ void Game::Init()
     myShader = ResourceManager::GetShader("defaultShader");
     Road = new Sprite(myShader);
     modelShader = ResourceManager::GetShader("modelShader");
-    Car = new Model("objects/car/CarC6_0003.obj", modelShader);
+    glm::vec4 carPos = glm::vec4(0.0f, -0.5f, 0.0f, 0.0f);
+    Car = new GameObject("objects/car/CarC6_0003.obj", modelShader, carPos);
     // load textures
     ResourceManager::LoadTexture("textures/road.jpg", false, "road");
-    // configure game objects
-    //glm::vec2 RoadPos = glm::vec3(0.0f, 0.0f, 0.0f);
-    //Player = new GameObject(RoadPos, PLAYER_SIZE, ResourceManager::GetTexture("road"));
 }
 
 void Game::Update(float dt)
@@ -74,11 +72,13 @@ void Game::Render()
         myTexture = ResourceManager::GetTexture("road");
         Road->DrawSprite(myTexture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
 
-        // Draw Model
+        //// Draw Model
         ResourceManager::GetShader("modelShader").Use().SetMatrix4("projection", projection);
         ResourceManager::GetShader("modelShader").SetMatrix4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); //position = 0,0,0
+        model = glm::rotate(model, glm::radians(Car->Rotation), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
+        model = glm::translate(model, glm::vec3(Car->Position)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
         ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
         Car->Draw();
@@ -89,8 +89,7 @@ void Game::KeyboardInput(float dt)
 {
     if (this->State == GAME_ACTIVE)
     {
-        // KEYBOARD
-        //std::cout << "ACTIVE" << std::endl;
+        // CAMERA
         if (this->Keys[GLFW_KEY_W])
             camera->ProcessKeyboard(FORWARD, dt);
         if (this->Keys[GLFW_KEY_S])
@@ -99,6 +98,16 @@ void Game::KeyboardInput(float dt)
             camera->ProcessKeyboard(LEFT, dt);
         if (this->Keys[GLFW_KEY_D])
             camera->ProcessKeyboard(RIGHT, dt);
+
+        // CAR
+        if (this->Keys[GLFW_KEY_UP])
+            Car->move(FORWARD, dt);
+        if (this->Keys[GLFW_KEY_DOWN])
+            Car->move(BACKWARD, dt);
+        if (this->Keys[GLFW_KEY_RIGHT])
+            Car->move(RIGHT, dt);
+        if (this->Keys[GLFW_KEY_LEFT])
+            Car->move(LEFT, dt);
     }
 }
 
