@@ -25,25 +25,25 @@ void GameObject::move(Movement direction, float deltaTime)
 
     float velocity = MovementSpeed * deltaTime;
     if (direction == FORWARD) {
-        Position += velocity * glm::vec3(0.0f, 0.0f, 1.0f);;
+        Position += carFront * velocity;
     }
     if (direction == BACKWARD) { 
-        Position -= velocity * glm::vec3(0.0f, 0.0f, 1.0f);;;
+        Position -= carFront * velocity;
     }
     if (direction == LEFT) {
-        //std::cout << "LEFT" << std::endl;
         Rotation += 1.0f;
-        //// calculate the new Front vector
-        //glm::vec3 front;
-        //front.x = cos(glm::radians(Yaw));
-        //front.z = sin(glm::radians(Yaw));
-        //cameraFront = glm::normalize(front);
-        //// also re-calculate the Right and Up vector
-        //Right = glm::normalize(glm::cross(cameraFront, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-        //cameraUp = glm::normalize(glm::cross(Right, cameraFront));
+        glm::vec3 front;
+        front.x = sin(glm::radians(Rotation));
+        front.y = 0.0f;
+        front.z = cos(glm::radians(Rotation));
+        carFront = glm::normalize(front);
     }
     if (direction == RIGHT) {
-        //std::cout << "RIGHT" << std::endl;
         Rotation -= 1.0f;
+        glm::vec3 front;
+        front.x = sin(glm::radians(Rotation));
+        front.y = 0.0f;
+        front.z = cos(glm::radians(Rotation));
+        carFront = glm::normalize(front);
     }
 }

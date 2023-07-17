@@ -30,6 +30,8 @@ public:
     Texture2D   Object;
     Model* model;
 
+    glm::vec3 carFront = glm::normalize(glm::vec3(0.0f, 0.0f, 1.0f));
+
     // constructor(s)
     GameObject();
     GameObject(string const& path, Shader &Shader, glm::vec3 pos, glm::vec3 velocity = glm::vec3(0.0f,0.0f,0.0f));
