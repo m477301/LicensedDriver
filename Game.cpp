@@ -78,7 +78,7 @@ void Game::Render()
         ResourceManager::GetShader("modelShader").Use().SetMatrix4("projection", projection);
         ResourceManager::GetShader("modelShader").SetMatrix4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(Car->Position) + glm::vec3(0.0f, -0.5f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::translate(model, glm::vec3(Car->Position)); // translate it down so it's at the center of the scene
         model = glm::rotate(model, glm::radians(Car->Rotation), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
         model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
         ResourceManager::GetShader("modelShader").SetMatrix4("model", model);

@@ -46,7 +46,7 @@ glm::mat4 Camera::GetViewMatrix(glm::vec3 carPos, float carYaw)
     float xDis = 0.2f * cos(glm::radians(carYaw)) + (-0.25f) * sin(glm::radians(carYaw));
     this->Position = carPos + glm::vec3(
         xDis,
-        0.1f, 
+        0.6f, 
         zDis
         );
 
