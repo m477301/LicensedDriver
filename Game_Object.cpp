@@ -31,7 +31,7 @@ void GameObject::move(Movement direction, float deltaTime)
         Position -= carFront * velocity;
     }
     if (direction == LEFT) {
-        Rotation += 1.0f;
+        Rotation += RotationSpeed;
         glm::vec3 front;
         front.x = sin(glm::radians(Rotation));
         front.y = 0.0f;
@@ -39,7 +39,7 @@ void GameObject::move(Movement direction, float deltaTime)
         carFront = glm::normalize(front);
     }
     if (direction == RIGHT) {
-        Rotation -= 1.0f;
+        Rotation -= RotationSpeed;
         glm::vec3 front;
         front.x = sin(glm::radians(Rotation));
         front.y = 0.0f;

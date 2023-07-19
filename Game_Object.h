@@ -23,6 +23,7 @@ public:
     glm::vec3   Position, Size, Velocity;
     glm::vec3   Color;
     float       Rotation;
+    float       RotationSpeed = 0.5;
     float       MovementSpeed;
     bool        IsSolid;
     bool        Destroyed;

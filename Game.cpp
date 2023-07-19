@@ -34,8 +34,6 @@ Game::~Game()
 
 void Game::Init()
 {
-    // Setup Camera
-    camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
     // load shaders
     ResourceManager::LoadShader("default_v.txt", "default_f.txt", nullptr, "defaultShader");
@@ -45,10 +43,14 @@ void Game::Init()
     myShader = ResourceManager::GetShader("defaultShader");
     Road = new Sprite(myShader);
     modelShader = ResourceManager::GetShader("modelShader");
-    glm::vec4 carPos = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    glm::vec3 carPos = glm::vec3(0.0f, 0.0f, 0.0f);
     Car = new GameObject("objects/car/CarC6_0003.obj", modelShader, carPos);
     // load textures
     ResourceManager::LoadTexture("textures/road.jpg", false, "road");
+
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    // Setup Camera
+    camera = new Camera(cameraPos);
 }
 
 void Game::Update(float dt)
@@ -60,9 +62,9 @@ void Game::Render()
 {
     if (this->State == GAME_ACTIVE)
     {
+        glm::mat4 view = camera->GetViewMatrix(Car->Position, Car->Rotation);
         // Camera Info
         glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)this->Width / (float)this->Height, 0.1f, 100.0f);
-        glm::mat4 view = camera->GetViewMatrix();
         ResourceManager::GetShader("defaultShader").Use().SetMatrix4("projection", projection);
         ResourceManager::GetShader("defaultShader").SetMatrix4("view", view);
 
@@ -77,7 +79,6 @@ void Game::Render()
         ResourceManager::GetShader("modelShader").SetMatrix4("view", view);
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(Car->Position) + glm::vec3(0.0f, -0.5f, 0.0f)); // translate it down so it's at the center of the scene
-        //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); //position = 0,0,0
         model = glm::rotate(model, glm::radians(Car->Rotation), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
         model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
         ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
@@ -98,40 +99,48 @@ void Game::KeyboardInput(float dt)
             camera->ProcessKeyboard(LEFT, dt);
         if (this->Keys[GLFW_KEY_D])
             camera->ProcessKeyboard(RIGHT, dt);
+        if (this->Keys[GLFW_KEY_C])
+            camera->changeViewPosition();
 
         // CAR
         if (this->Keys[GLFW_KEY_UP])
             Car->move(FORWARD, dt);
         if (this->Keys[GLFW_KEY_DOWN])
             Car->move(BACKWARD, dt);
-        if (this->Keys[GLFW_KEY_RIGHT])
+        if (this->Keys[GLFW_KEY_RIGHT]) {
+            std::cout << "CAR " << Car->Position.x << " " << Car->Position.y << " " << Car->Position.z << "\n" << std::endl;
+            std::cout << "CAMERA " << camera->Position.x << " " << camera->Position.y << " " << camera->Position.z << "\n" << std::endl;
             Car->move(RIGHT, dt);
-        if (this->Keys[GLFW_KEY_LEFT])
+        }
+        if (this->Keys[GLFW_KEY_LEFT]) {
+            std::cout << "CAR " << Car->Position.x << " " << Car->Position.y << " " << Car->Position.z << "\n" << std::endl;
+            std::cout << "CAMERA " << camera->Position.x << " " << camera->Position.y << " " << camera->Position.z << "\n" << std::endl;
             Car->move(LEFT, dt);
+        }
     }
 }
 
 void Game::MouseInput(float xpos, float ypos)
 {
-    if (this->State == GAME_ACTIVE)
-    {
-        if (firstMouse)
-        {
-            this->lastX = xpos;
-            this->lastY = ypos;
-            this->firstMouse = false;
-        }
+    //if (this->State == GAME_ACTIVE)
+    //{
+    //    if (firstMouse)
+    //    {
+    //        this->lastX = xpos;
+    //        this->lastY = ypos;
+    //        this->firstMouse = false;
+    //    }
 
-        float xoffset = xpos - this->lastX;
-        float yoffset = this->lastY - ypos; // reversed since y-coordinates go from bottom to top
+    //    float xoffset = xpos - this->lastX;
+    //    float yoffset = this->lastY - ypos; // reversed since y-coordinates go from bottom to top
 
-        this->lastX = xpos;
-        this->lastY = ypos;
+    //    this->lastX = xpos;
+    //    this->lastY = ypos;
 
-        camera->ProcessMouseMovement(xoffset, yoffset);
-    }
+    //    camera->ProcessMouseMovement(xoffset, yoffset);
+    //}
 }
 
 void Game::ScrollInput(float yoffset) {
-    camera->ProcessMouseScroll(yoffset);
+    //camera->ProcessMouseScroll(yoffset);
 }

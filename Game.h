@@ -5,10 +5,11 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 //#include "Game_Level.h"
 #include <iostream>
-
 
 // Represents the current state of the game
 enum GameState {
@@ -23,8 +24,6 @@ enum Movement {
     LEFT,
     RIGHT
 };
-
-const float YAW = -90.0f;
 
 // Initial size of the player paddle
 //const glm::vec3 ROAD_SIZE(100.0f, 100.0f,0.0f);

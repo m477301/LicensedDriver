@@ -20,8 +20,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCREEN_WIDTH = 1920;
-const unsigned int SCREEN_HEIGHT = 1000;
+const unsigned int SCREEN_WIDTH = 800;
+const unsigned int SCREEN_HEIGHT = 600;
 
 // Setup Game
 Game LicensedDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
