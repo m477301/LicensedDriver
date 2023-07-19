@@ -91,16 +91,11 @@ void Game::KeyboardInput(float dt)
     if (this->State == GAME_ACTIVE)
     {
         // CAMERA
-        if (this->Keys[GLFW_KEY_W])
-            camera->ProcessKeyboard(FORWARD, dt);
-        if (this->Keys[GLFW_KEY_S])
-            camera->ProcessKeyboard(BACKWARD, dt);
-        if (this->Keys[GLFW_KEY_A])
-            camera->ProcessKeyboard(LEFT, dt);
-        if (this->Keys[GLFW_KEY_D])
-            camera->ProcessKeyboard(RIGHT, dt);
-        if (this->Keys[GLFW_KEY_C])
+        if (this->Keys[GLFW_KEY_C] && !this->KeysProcessed[GLFW_KEY_C]) 
+        {
             camera->changeViewPosition();
+            this->KeysProcessed[GLFW_KEY_C] = true;
+        }
 
         // CAR
         if (this->Keys[GLFW_KEY_UP])
@@ -108,13 +103,9 @@ void Game::KeyboardInput(float dt)
         if (this->Keys[GLFW_KEY_DOWN])
             Car->move(BACKWARD, dt);
         if (this->Keys[GLFW_KEY_RIGHT]) {
-            std::cout << "CAR " << Car->Position.x << " " << Car->Position.y << " " << Car->Position.z << "\n" << std::endl;
-            std::cout << "CAMERA " << camera->Position.x << " " << camera->Position.y << " " << camera->Position.z << "\n" << std::endl;
             Car->move(RIGHT, dt);
         }
         if (this->Keys[GLFW_KEY_LEFT]) {
-            std::cout << "CAR " << Car->Position.x << " " << Car->Position.y << " " << Car->Position.z << "\n" << std::endl;
-            std::cout << "CAMERA " << camera->Position.x << " " << camera->Position.y << " " << camera->Position.z << "\n" << std::endl;
             Car->move(LEFT, dt);
         }
     }
@@ -122,23 +113,23 @@ void Game::KeyboardInput(float dt)
 
 void Game::MouseInput(float xpos, float ypos)
 {
-    //if (this->State == GAME_ACTIVE)
-    //{
-    //    if (firstMouse)
-    //    {
-    //        this->lastX = xpos;
-    //        this->lastY = ypos;
-    //        this->firstMouse = false;
-    //    }
+    if (this->State == GAME_ACTIVE && camera->view)
+    {
+        if (firstMouse)
+        {
+            this->lastX = xpos;
+            this->lastY = ypos;
+            this->firstMouse = false;
+        }
 
-    //    float xoffset = xpos - this->lastX;
-    //    float yoffset = this->lastY - ypos; // reversed since y-coordinates go from bottom to top
+        float xoffset = xpos - this->lastX;
+        float yoffset = this->lastY - ypos; // reversed since y-coordinates go from bottom to top
 
-    //    this->lastX = xpos;
-    //    this->lastY = ypos;
+        this->lastX = xpos;
+        this->lastY = ypos;
 
-    //    camera->ProcessMouseMovement(xoffset, yoffset);
-    //}
+        camera->ProcessMouseMovement(xoffset, yoffset, true);
+    }
 }
 
 void Game::ScrollInput(float yoffset) {

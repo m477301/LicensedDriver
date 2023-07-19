@@ -41,6 +41,7 @@ public:
     // game state
     GameState               State;
     bool                    Keys[1024];
+    bool                    KeysProcessed[1024];
     unsigned int            Width, Height, Depth;
     float lastX, lastY;
     bool firstMouse = true;

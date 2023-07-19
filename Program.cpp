@@ -20,8 +20,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCREEN_WIDTH = 800;
-const unsigned int SCREEN_HEIGHT = 600;
+const unsigned int SCREEN_WIDTH = 1000;
+const unsigned int SCREEN_HEIGHT = 800;
 
 // Setup Game
 Game LicensedDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -161,8 +161,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     {
         if (action == GLFW_PRESS)
             LicensedDriver.Keys[key] = true;
-        else if (action == GLFW_RELEASE)
+        else if (action == GLFW_RELEASE) 
+        {
             LicensedDriver.Keys[key] = false;
+            LicensedDriver.KeysProcessed[key] = false;
+        }
     }
 }
 
