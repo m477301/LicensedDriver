@@ -16,7 +16,6 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
 // settings
@@ -70,7 +69,6 @@ int main(int argc, char* argv[])
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
     //stbi_set_flip_vertically_on_load(true);
@@ -178,11 +176,4 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     float ypos = static_cast<float>(yposIn);
 
     LicensedDriver.MouseInput(xpos, ypos);
-}
-
- //glfw: whenever the mouse scroll wheel scrolls, this callback is called
- //----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-    LicensedDriver.ScrollInput(static_cast<float>(yoffset));
 }

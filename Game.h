@@ -43,6 +43,8 @@ public:
     bool                    Keys[1024];
     bool                    KeysProcessed[1024];
     unsigned int            Width, Height, Depth;
+    unsigned int            Level;
+    unsigned int            Points;
     float lastX, lastY;
     bool firstMouse = true;
     // constructor/destructor
@@ -55,8 +57,9 @@ public:
     void Render();
     void KeyboardInput(float dt);
     void MouseInput(float xpos, float ypose);
-    void ScrollInput(float yoffset);
 
+private:
+    void checkInfractions();
 };
 
 #endif

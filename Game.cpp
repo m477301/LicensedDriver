@@ -13,13 +13,22 @@
 #include "Game_Object.h"
 #include "Model.h"
 
+#include <array>
+#include <vector>
+
 // Game-related State data
-Sprite* Road;
 Camera* camera;
+
+Sprite* Road;
+Sprite* CarVertTest;
+Sprite* MStartVertTest;
+
 GameObject* Car;
+GameObject* StopSign;
+GameObject* StopMarkings;
 
 Game::Game(unsigned int width, unsigned int height)
-    : State(GAME_ACTIVE), Keys(), Width(width), Height(height)
+    : State(GAME_ACTIVE), Keys(), Width(width), Height(height), Points(20)
 {
     float lastX = width / 2.0f;
     float lastY = height / 2.0f;
@@ -30,6 +39,11 @@ Game::~Game()
 {
     delete Road;
     delete camera;
+    delete Car;
+    delete StopSign;
+    delete StopMarkings;
+    delete CarVertTest;
+    delete MStartVertTest;
 }
 
 void Game::Init()
@@ -40,21 +54,56 @@ void Game::Init()
     ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
     // set render-specific controls
     Shader myShader, modelShader;
+
+    std::vector<float> roadVertices = {
+        // positions            // normals         // texcoords
+         3.0f, 0.0f,  50.0f,  0.0f, 1.0f, 0.0f,  1.5f,  0.0f,  // bottom left
+        -3.0f, 0.0f,  50.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, // top left
+        -3.0f, 0.0f, -50.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // top right 
+         3.0f, 0.0f,  50.0f,  0.0f, 1.0f, 0.0f,  1.5f,  0.0f,  // bottom left
+        -3.0f, 0.0f, -50.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, //  top right
+         3.0f, 0.0f, -50.0f,  0.0f, 1.0f, 0.0f,  1.5f, 10.0f  // bottom right
+    };
     myShader = ResourceManager::GetShader("defaultShader");
-    Road = new Sprite(myShader);
+    Road = new Sprite(myShader, roadVertices);
+
+    std::vector<float> verticalVertices = {
+        // positions            // normals         // texcoords
+         1.0f, 2.0f,  0.0f,  0.0f, 1.0f, 0.0f,  1.5f,  0.0f,  // top right
+         1.0f, 0.0f,  0.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, // bottom right
+        -1.0f, 2.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // top left
+
+         1.0f, 0.0f,  0.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, // bottom right
+        -1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // bottom left
+        -1.0f, 2.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // top left
+    };
+    CarVertTest = new Sprite(myShader, verticalVertices);
+    MStartVertTest = new Sprite(myShader, verticalVertices);
+
     modelShader = ResourceManager::GetShader("modelShader");
     glm::vec3 carPos = glm::vec3(0.0f, 0.0f, 0.0f);
     Car = new GameObject("objects/car/CarC6_0003.obj", modelShader, carPos);
+
+    glm::vec3 stopSignPos = glm::vec3(-2.0f, 0.0f, 10.0f);
+    StopSign = new GameObject("objects/stopsign/stopsign.obj", modelShader, stopSignPos);
+
+    glm::vec3 stopMarkingsPos = glm::vec3(0.0f, 0.1f, 10.0f - 1.0f);
+    StopMarkings = new GameObject("objects/stopsign/stopmarkings.obj", modelShader, stopMarkingsPos);
+
     // load textures
     ResourceManager::LoadTexture("textures/road.jpg", false, "road");
+    ResourceManager::LoadTexture("textures/white.jpg", false, "awesome");
 
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
     // Setup Camera
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
     camera = new Camera(cameraPos);
 }
 
 void Game::Update(float dt)
 {
+    // Check if any road infractions occured
+    this->checkInfractions();
+
 
 }
 
@@ -65,19 +114,53 @@ void Game::Render()
         glm::mat4 view = camera->GetViewMatrix(Car->Position, Car->Rotation);
         // Camera Info
         glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)this->Width / (float)this->Height, 0.1f, 100.0f);
+        glm::mat4 model = glm::mat4(1.0f);
         ResourceManager::GetShader("defaultShader").Use().SetMatrix4("projection", projection);
         ResourceManager::GetShader("defaultShader").SetMatrix4("view", view);
 
-        // draw background
-        //Renderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
+        // draw road
         Texture2D myTexture;
         myTexture = ResourceManager::GetTexture("road");
         Road->DrawSprite(myTexture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
 
-        //// Draw Model
+        // draw test vertices
+        myTexture = ResourceManager::GetTexture("awesome");
+
+        CarVertTest->DrawSprite(myTexture, Car->Position, glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
+        glm::vec3 carFrontPos = Car->Position + glm::vec3(0.0f, 0.0f, (157.30f * 0.01f)/2.0f);
+        model = glm::translate(model, glm::vec3(carFrontPos));
+        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
+        model = glm::mat4(1.0f);
+
+        glm::vec3 linePos = StopMarkings->Position + glm::vec3(0.0f, 0.0f, 2.17f*0.32f);
+        MStartVertTest->DrawSprite(myTexture, linePos, glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
+        model = glm::translate(model, glm::vec3(linePos));
+        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
+        model = glm::mat4(1.0f);
+
+        // Draw Model
         ResourceManager::GetShader("modelShader").Use().SetMatrix4("projection", projection);
         ResourceManager::GetShader("modelShader").SetMatrix4("view", view);
-        glm::mat4 model = glm::mat4(1.0f);
+
+        // draw Stop Sign
+        model = glm::translate(model, glm::vec3(StopSign->Position)); // translate it down so it's at the center of the scene
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
+        model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));	// it's a bit too big for our scene, so scale it down
+        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
+        StopSign->Draw();
+
+        model = glm::mat4(1.0f);
+
+        // draw Stop Markings
+        model = glm::translate(model, glm::vec3(StopMarkings->Position)); // translate it down so it's at the center of the scene
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
+        model = glm::scale(model, glm::vec3(0.32f, 0.32f, 0.32f));	// it's a bit too big for our scene, so scale it down
+        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
+        StopMarkings->Draw();
+
+        model = glm::mat4(1.0f);
+
+        // draw Car
         model = glm::translate(model, glm::vec3(Car->Position)); // translate it down so it's at the center of the scene
         model = glm::rotate(model, glm::radians(Car->Rotation), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
         model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
@@ -93,8 +176,29 @@ void Game::KeyboardInput(float dt)
         // CAMERA
         if (this->Keys[GLFW_KEY_C] && !this->KeysProcessed[GLFW_KEY_C]) 
         {
-            camera->changeViewPosition();
+            camera->changeViewPosition
+            (
+                camera->vantagePoint == INSIDE_CAR 
+                ? camera->vantagePoint = OUTSIDE_CAR 
+                : 
+                (
+                    camera->vantagePoint == OUTSIDE_CAR ? 
+                    camera->vantagePoint = FREE_ROAMING 
+                    : 
+                    camera->vantagePoint = INSIDE_CAR
+                )
+            );
             this->KeysProcessed[GLFW_KEY_C] = true;
+        }
+        if (camera->vantagePoint == FREE_ROAMING) {
+            if (this->Keys[GLFW_KEY_W])
+                camera->ProcessKeyboard(FORWARD, dt);
+            if (this->Keys[GLFW_KEY_S])
+                camera->ProcessKeyboard(BACKWARD, dt);
+            if (this->Keys[GLFW_KEY_A])
+                camera->ProcessKeyboard(LEFT, dt);
+            if (this->Keys[GLFW_KEY_D])
+                camera->ProcessKeyboard(RIGHT, dt);
         }
 
         // CAR
@@ -113,7 +217,7 @@ void Game::KeyboardInput(float dt)
 
 void Game::MouseInput(float xpos, float ypos)
 {
-    if (this->State == GAME_ACTIVE && camera->view)
+    if (this->State == GAME_ACTIVE && (camera->vantagePoint == INSIDE_CAR || camera->vantagePoint == FREE_ROAMING ))
     {
         if (firstMouse)
         {
@@ -132,6 +236,18 @@ void Game::MouseInput(float xpos, float ypos)
     }
 }
 
-void Game::ScrollInput(float yoffset) {
-    //camera->ProcessMouseScroll(yoffset);
+void Game::checkInfractions() {
+
+    // Check for stop sign infraction
+
+    if (Car->Position.z + ((157.30f * 0.01f) / 2.0f) < StopMarkings->Position.z + (2.17f * 0.32f)
+        &&
+        Car->Position.z + ((157.30f * 0.01f) / 2.0f) > StopMarkings->Position.z + (2.17f * 0.32f) - 1.0f) {
+        std::cout << "Should Stop HERE" << StopMarkings->Position.z << " , " << Car->Position.z << std::endl;
+        
+    }
+
+    // If the car before the stop line doesn't reduce speed to 0
+    // take away 5 points
+    // else continue as more
 }
