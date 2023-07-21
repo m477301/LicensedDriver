@@ -11,6 +11,8 @@
 //#include "Game_Level.h"
 #include <iostream>
 
+#include "Text_Renderer.h"
+
 // Represents the current state of the game
 enum GameState {
     GAME_ACTIVE,

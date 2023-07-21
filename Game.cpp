@@ -19,9 +19,12 @@
 // Game-related State data
 Camera* camera;
 
+TextRenderer* Text;
+
 Sprite* Road;
-Sprite* CarVertTest;
-Sprite* MStartVertTest;
+//Sprite* CarVertTest;
+//Sprite* MStartVertTest;
+//Sprite* MEndVertTest;
 
 GameObject* Car;
 GameObject* StopSign;
@@ -42,13 +45,16 @@ Game::~Game()
     delete Car;
     delete StopSign;
     delete StopMarkings;
-    delete CarVertTest;
-    delete MStartVertTest;
+    //delete CarVertTest;
+    //delete MStartVertTest;
+    //delete MEndVertTest;
 }
 
 void Game::Init()
 {
-
+    // Text
+    Text = new TextRenderer(this->Width, this->Height);
+    Text->Load("fonts/ocraext.TTF", 24);
     // load shaders
     ResourceManager::LoadShader("default_v.txt", "default_f.txt", nullptr, "defaultShader");
     ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
@@ -67,18 +73,19 @@ void Game::Init()
     myShader = ResourceManager::GetShader("defaultShader");
     Road = new Sprite(myShader, roadVertices);
 
-    std::vector<float> verticalVertices = {
-        // positions            // normals         // texcoords
-         1.0f, 2.0f,  0.0f,  0.0f, 1.0f, 0.0f,  1.5f,  0.0f,  // top right
-         1.0f, 0.0f,  0.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, // bottom right
-        -1.0f, 2.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // top left
+    //std::vector<float> verticalVertices = {
+    //    // positions            // normals         // texcoords
+    //     1.0f, 2.0f,  0.0f,  0.0f, 1.0f, 0.0f,  1.5f,  0.0f,  // top right
+    //     1.0f, 0.0f,  0.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, // bottom right
+    //    -1.0f, 2.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // top left
 
-         1.0f, 0.0f,  0.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, // bottom right
-        -1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // bottom left
-        -1.0f, 2.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // top left
-    };
-    CarVertTest = new Sprite(myShader, verticalVertices);
-    MStartVertTest = new Sprite(myShader, verticalVertices);
+    //     1.0f, 0.0f,  0.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, // bottom right
+    //    -1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // bottom left
+    //    -1.0f, 2.0f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f, // top left
+    //};
+    //CarVertTest = new Sprite(myShader, verticalVertices);
+    //MStartVertTest = new Sprite(myShader, verticalVertices);
+    //MEndVertTest = new Sprite(myShader, verticalVertices);
 
     modelShader = ResourceManager::GetShader("modelShader");
     glm::vec3 carPos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -101,6 +108,7 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
+    Car->Update(dt);
     // Check if any road infractions occured
     this->checkInfractions();
 
@@ -111,32 +119,48 @@ void Game::Render()
 {
     if (this->State == GAME_ACTIVE)
     {
+        glDepthRange(0, 0.01);
+
+        // TEXT
+        std::stringstream ss; ss << this->Points;
+        Text->RenderText("Points:" + ss.str(), 5.0f, 5.0f, 1.0f);
+
+        glDepthRange(0.01, 1.0);
+
         glm::mat4 view = camera->GetViewMatrix(Car->Position, Car->Rotation);
         // Camera Info
         glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)this->Width / (float)this->Height, 0.1f, 100.0f);
         glm::mat4 model = glm::mat4(1.0f);
         ResourceManager::GetShader("defaultShader").Use().SetMatrix4("projection", projection);
         ResourceManager::GetShader("defaultShader").SetMatrix4("view", view);
+        ResourceManager::GetShader("defaultShader").SetMatrix4("model", model);
 
         // draw road
         Texture2D myTexture;
         myTexture = ResourceManager::GetTexture("road");
         Road->DrawSprite(myTexture, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
 
-        // draw test vertices
-        myTexture = ResourceManager::GetTexture("awesome");
+        ////// draw test vertices
+        //myTexture = ResourceManager::GetTexture("awesome");
 
-        CarVertTest->DrawSprite(myTexture, Car->Position, glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
-        glm::vec3 carFrontPos = Car->Position + glm::vec3(0.0f, 0.0f, (157.30f * 0.01f)/2.0f);
-        model = glm::translate(model, glm::vec3(carFrontPos));
-        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
-        model = glm::mat4(1.0f);
+        //glm::vec3 carFrontPos = Car->Position + glm::vec3(0.0f, 0.0f, (157.30f * 0.01f)/2.0f);
+        //CarVertTest->DrawSprite(myTexture, Car->Position, glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
+        //model = glm::translate(model, carFrontPos);
+        //ResourceManager::GetShader("defaultShader").SetMatrix4("model", model);
+        //model = glm::mat4(1.0f);
 
-        glm::vec3 linePos = StopMarkings->Position + glm::vec3(0.0f, 0.0f, 2.17f*0.32f);
-        MStartVertTest->DrawSprite(myTexture, linePos, glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
-        model = glm::translate(model, glm::vec3(linePos));
-        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
-        model = glm::mat4(1.0f);
+        //glm::vec3 linePos = StopMarkings->Position + glm::vec3(0.0f, 0.0f, 2.17f*0.32f);
+        //MStartVertTest->DrawSprite(myTexture, linePos, glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
+        //model = glm::translate(model, linePos);
+        //ResourceManager::GetShader("defaultShader").SetMatrix4("model", model);
+        //model = glm::mat4(1.0f);
+
+        //glm::vec3 lineLPos = StopMarkings->Position + glm::vec3(0.0f, 0.0f, (2.17f * 0.32f)-1.5f);
+        ////std::cout << " MARKPOS " << lineLPos.x << " , " << lineLPos.y << " , " << lineLPos.z << std::endl;
+        //MEndVertTest->DrawSprite(myTexture, lineLPos, glm::vec3(this->Width, this->Height, 0.0f), 0.0f);
+        //model = glm::translate(model, lineLPos);
+        //ResourceManager::GetShader("defaultShader").SetMatrix4("model", model);
+        //model = glm::mat4(1.0f);
 
         // Draw Model
         ResourceManager::GetShader("modelShader").Use().SetMatrix4("projection", projection);
@@ -166,6 +190,9 @@ void Game::Render()
         model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
         ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
         Car->Draw();
+
+        // restore depth range
+        glDepthRange(0, 1.0);
     }
 }
 
@@ -242,12 +269,23 @@ void Game::checkInfractions() {
 
     if (Car->Position.z + ((157.30f * 0.01f) / 2.0f) < StopMarkings->Position.z + (2.17f * 0.32f)
         &&
-        Car->Position.z + ((157.30f * 0.01f) / 2.0f) > StopMarkings->Position.z + (2.17f * 0.32f) - 1.0f) {
-        std::cout << "Should Stop HERE" << StopMarkings->Position.z << " , " << Car->Position.z << std::endl;
-        
+        Car->Position.z + ((157.30f * 0.01f) / 2.0f) > StopMarkings->Position.z + (2.17f * 0.32f) - 1.5f) {
+        // check if car reduces speed to 0
+        if (Car->Velocity.x + Car->Velocity.y + Car->Velocity.z == 0.0f) {
+            // they stopped
+            StopMarkings->PassedObjective = true;
+        }
     }
-
-    // If the car before the stop line doesn't reduce speed to 0
-    // take away 5 points
-    // else continue as more
+    else if (
+        // obstacle has been passed and infraction has been committed
+        (Car->Position.z + ((157.30f * 0.01f) / 2.0f) > StopMarkings->Position.z + (2.17f * 0.32f))
+        &&
+        !StopMarkings->PassedObjective
+        ) {
+        this->Points -= 5;
+        StopMarkings->PassedObjective = true;
+    }
+    else if(Car->Position.z + ((157.30f * 0.01f) / 2.0f) < StopMarkings->Position.z + (2.17f * 0.32f)) {
+        StopMarkings->PassedObjective = false;
+    }
 }

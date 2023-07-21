@@ -51,6 +51,9 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Text_Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="default_v.txt">
@@ -63,6 +66,12 @@
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="model_f.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\text_f.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\text_v.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
@@ -95,6 +104,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Text_Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
