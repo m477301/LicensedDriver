@@ -74,6 +74,12 @@
     <Text Include="shaders\text_v.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="shaders\normal_f.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\normal_v.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">

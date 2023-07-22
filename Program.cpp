@@ -19,8 +19,8 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCREEN_WIDTH = 1000;
-const unsigned int SCREEN_HEIGHT = 800;
+const unsigned int SCREEN_WIDTH = 1200;
+const unsigned int SCREEN_HEIGHT = 1000;
 
 // Setup Game
 Game LicensedDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 
     // lighting info
 // -------------
-    glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
+    //glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
 
     // render loop
     // -----------

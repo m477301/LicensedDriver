@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "Text_Renderer.h"
+#include "Texture.h"
 
 // Represents the current state of the game
 enum GameState {

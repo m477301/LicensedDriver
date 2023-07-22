@@ -162,6 +162,8 @@
     <Text Include="default_v.txt" />
     <Text Include="model_f.txt" />
     <Text Include="model_v.txt" />
+    <Text Include="shaders\normal_f.txt" />
+    <Text Include="shaders\normal_v.txt" />
     <Text Include="shaders\text_f.txt" />
     <Text Include="shaders\text_v.txt" />
   </ItemGroup>
