@@ -37,6 +37,9 @@ void main()
     normal = normalize(normal * 2.0 - 1.0);  // this normal is in tangent space
    
     // get diffuse color
+    vec4 texColor = texture(material.diffuse, fs_in.TexCoords);
+    if (texColor.a <= 0.1) 
+        discard;
     vec3 color = texture(material.diffuse, fs_in.TexCoords).rgb;
 
     // ambient

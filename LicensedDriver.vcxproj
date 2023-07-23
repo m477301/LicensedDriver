@@ -144,16 +144,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Game_Object.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Resource_Manager.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="StopSign.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Text_Renderer.cpp" />
   </ItemGroup>
@@ -169,14 +173,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Game_Object.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Resource_Manager.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="StopSign.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Text_Renderer.h" />
   </ItemGroup>

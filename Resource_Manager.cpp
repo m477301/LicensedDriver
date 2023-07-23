@@ -93,6 +93,7 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file, bool alpha)
     Texture2D texture;
     if (alpha)
     {
+        std::cout << " File " << file << std::endl;
         texture.Internal_Format = GL_RGBA;
         texture.Image_Format = GL_RGBA;
     }
@@ -100,8 +101,14 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file, bool alpha)
     int width, height, nrChannels;
     unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
     // now generate texture
-    texture.Generate(width, height, data);
-    // and finally free image data
-    stbi_image_free(data);
+    if (data) {
+        texture.Generate(width, height, nrChannels, data);
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << file << std::endl;
+        stbi_image_free(data);
+    }
     return texture;
 }

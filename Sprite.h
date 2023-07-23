@@ -8,29 +8,29 @@
 #include "Texture.h"
 #include "Shader.h"
 
-#include <array>
-#include <vector>
+#include <iostream>
 
 class Sprite
 {
 public:
     unsigned int diffuseMap, specularMap, normalMap;
+
+    glm::vec3 pos1, pos2, pos3, pos4;
     // Constructor (inits shaders/shapes)
-    Sprite(Shader& shader);
+    Sprite(Shader& shader, glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4);
     // Destructor
     ~Sprite();
     // Renders a defined quad textured with given sprite
-    void DrawSprite(Texture2D& texture, glm::vec3 position, glm::vec3 size = glm::vec3(10.0f, 10.0f, 10.0f), float rotate = 0.0f, glm::vec3 color = glm::vec3(1.0f));
-    void DrawSprite(Texture2D& diffuse_texture, Texture2D& specular_texture, glm::vec3 position, glm::vec3 size = glm::vec3(10.0f, 10.0f, 10.0f), float rotate = 0.0f, glm::vec3 color = glm::vec3(1.0f));
-    void DrawSprite(Texture2D& diffuse_texture, Texture2D& specular_texture, Texture2D& normal_texture, glm::vec3 position, glm::vec3 size = glm::vec3(10.0f, 10.0f, 10.0f), float rotate = 0.0f, glm::vec3 color = glm::vec3(1.0f));
+    void DrawSprite(Texture2D& diffuse_texture, Texture2D& specular_texture, Texture2D& normal_texture, glm::vec3 position);
+
+    void renderQuad();
 
 private:
     // Render state
-    float vertices[48];
+    unsigned int quadVAO = 0;
+    unsigned int quadVBO;
     Shader       shader;
-    unsigned int VAO, VBO;
     // Initializes and configures the quad's buffer and vertex attributes
-    void initRenderData();
 };
 
 #endif

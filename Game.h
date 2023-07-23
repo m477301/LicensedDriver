@@ -13,6 +13,7 @@
 
 #include "Text_Renderer.h"
 #include "Texture.h"
+#include "Scene.h"
 
 // Represents the current state of the game
 enum GameState {
