@@ -2,13 +2,17 @@
 
 #include <iostream>
 
-Sprite::Sprite(Shader& shader, glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4)
+Sprite::Sprite(Shader& shader, glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3, glm::vec2 uv4)
 {
     this->shader = shader;
     this->pos1 = pos1;
     this->pos2 = pos2;
     this->pos3 = pos3;
     this->pos4 = pos4;
+    this->uv1 = uv1;
+    this->uv2 = uv2;
+    this->uv3 = uv3;
+    this->uv4 = uv4;
 }
 
 Sprite::~Sprite()
@@ -37,11 +41,11 @@ void Sprite::renderQuad()
 
     if (this->quadVAO == 0)
     {
-        // texture coordinates
-        glm::vec2 uv1(0.0f, 1.0f);
-        glm::vec2 uv2(0.0f, 0.0f);
-        glm::vec2 uv3(1.0f, 0.0f);
-        glm::vec2 uv4(1.0f, 1.0f);
+        //// texture coordinates
+        //glm::vec2 uv1(0.0f, 1.0f);
+        //glm::vec2 uv2(0.0f, 0.0f);
+        //glm::vec2 uv3(1.0f, 0.0f);
+        //glm::vec2 uv4(1.0f, 1.0f);
         // normal vector
         glm::vec3 nm(0.0f, 1.0f, 0.0f);
 
@@ -53,8 +57,8 @@ void Sprite::renderQuad()
         // ----------
         glm::vec3 edge1 = this->pos2 - this->pos1;
         glm::vec3 edge2 = this->pos3 - this->pos1;
-        glm::vec2 deltaUV1 = uv2 - uv1;
-        glm::vec2 deltaUV2 = uv3 - uv1;
+        glm::vec2 deltaUV1 = this->uv2 - this->uv1;
+        glm::vec2 deltaUV2 = this->uv3 - this->uv1;
 
         float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
 
@@ -70,8 +74,8 @@ void Sprite::renderQuad()
         // ----------
         edge1 = this->pos3 - this->pos1;
         edge2 = this->pos4 - this->pos1;
-        deltaUV1 = uv3 - uv1;
-        deltaUV2 = uv4 - uv1;
+        deltaUV1 = this->uv3 - this->uv1;
+        deltaUV2 = this->uv4 - this->uv1;
 
         f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
 
@@ -87,13 +91,13 @@ void Sprite::renderQuad()
 
         float quadVertices[] = {
             // positions            // normal         // texcoords  // tangent                          // bitangent
-            this->pos1.x, this->pos1.y, this->pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
-            this->pos2.x, this->pos2.y, this->pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
-            this->pos3.x, this->pos3.y, this->pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+            this->pos1.x, this->pos1.y, this->pos1.z, nm.x, nm.y, nm.z, this->uv1.x, this->uv1.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+            this->pos2.x, this->pos2.y, this->pos2.z, nm.x, nm.y, nm.z, this->uv2.x, this->uv2.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+            this->pos3.x, this->pos3.y, this->pos3.z, nm.x, nm.y, nm.z, this->uv3.x, this->uv3.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
 
-            this->pos1.x, this->pos1.y, this->pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
-            this->pos3.x, this->pos3.y, this->pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
-            this->pos4.x, this->pos4.y, this->pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z
+            this->pos1.x, this->pos1.y, this->pos1.z, nm.x, nm.y, nm.z, this->uv1.x, this->uv1.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
+            this->pos3.x, this->pos3.y, this->pos3.z, nm.x, nm.y, nm.z, this->uv3.x, this->uv3.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
+            this->pos4.x, this->pos4.y, this->pos4.z, nm.x, nm.y, nm.z, this->uv4.x, this->uv4.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z
         };
         // configure plane VAO
         glGenVertexArrays(1, &this->quadVAO);

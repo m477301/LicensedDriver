@@ -10,7 +10,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd pole.jpg
+map_Kd BaseColor_Pole.png
+map_Ks Specular_Pole.png
+bump Normal_Pole.png
 
 newmtl Material.002
 Ns 96.078443
@@ -21,7 +23,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd pole.jpg
+map_Kd BaseColor_Pole.png
+map_Ks Specular_Pole.png
+bump Normal_Pole.png
 
 newmtl Material.003
 Ns 96.078443
@@ -32,4 +36,6 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd stop.png
+map_Kd BaseColor_Stop.png
+map_Ks Specular_Stop.png
+bump Normal_Stop.png

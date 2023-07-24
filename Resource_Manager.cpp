@@ -93,7 +93,6 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file, bool alpha)
     Texture2D texture;
     if (alpha)
     {
-        std::cout << " File " << file << std::endl;
         texture.Internal_Format = GL_RGBA;
         texture.Image_Format = GL_RGBA;
     }

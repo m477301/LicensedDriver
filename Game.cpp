@@ -47,13 +47,13 @@ void Game::Init()
     // load shaders
     Shader defaultShader, modelShader, lightShader;
     defaultShader = ResourceManager::LoadShader("shaders/normal_v.txt", "shaders/normal_f.txt", nullptr, "shader");
-    modelShader = ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
+    //modelShader = ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
     lightShader = ResourceManager::LoadShader("shaders/lightCube_v.txt", "shaders/lightCube_f.txt", nullptr, "light_cube");
 
-    scene = new Scene(defaultShader, modelShader, lightShader);
+    scene = new Scene(defaultShader, defaultShader, lightShader);
 
     glm::vec3 carPos = glm::vec3(0.0f, 0.0f, 0.0f);
-    Car = new Player("objects/car/CarC6_0003.obj", modelShader, carPos);
+    Car = new Player("objects/car/CarC6_0003.obj", defaultShader, carPos);
 
     // Setup Camera
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -63,9 +63,11 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
-    Car->Update(dt);
+    Car->update(dt);
 
     scene->Update(dt);
+
+    this->checkInfractions();
 }
 
 void Game::Render()
@@ -95,14 +97,14 @@ void Game::Render()
         model = glm::mat4(1.0f);
 
         // DRAW PLAYER
-        ResourceManager::GetShader("modelShader").Use().SetMatrix4("projection", projection);
-        ResourceManager::GetShader("modelShader").SetMatrix4("view", view);
+        ResourceManager::GetShader("shader").Use().SetMatrix4("projection", projection);
+        ResourceManager::GetShader("shader").SetMatrix4("view", view);
 
         // draw Car
         model = glm::translate(model, glm::vec3(Car->Position)); // translate it down so it's at the center of the scene
         model = glm::rotate(model, glm::radians(Car->Rotation), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
         model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
-        ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
+        ResourceManager::GetShader("shader").SetMatrix4("model", model);
         Car->Draw();
 
         // restore depth range
@@ -178,29 +180,13 @@ void Game::MouseInput(float xpos, float ypos)
 }
 
 void Game::checkInfractions() {
-//
-//    // Check for stop sign infraction
-//
-//    if (Car->Position.z + ((157.30f * 0.01f) / 2.0f) < StopMarkings->Position.z + (2.17f * 0.32f)
-//        &&
-//        Car->Position.z + ((157.30f * 0.01f) / 2.0f) > StopMarkings->Position.z + (2.17f * 0.32f) - 1.5f) {
-//        // check if car reduces speed to 0
-//        if (Car->Velocity.x + Car->Velocity.y + Car->Velocity.z == 0.0f) {
-//            // they stopped
-//            StopMarkings->PassedObjective = true;
-//        }
-//    }
-//    else if (
-//        // obstacle has been passed and infraction has been committed
-//        (Car->Position.z + ((157.30f * 0.01f) / 2.0f) > StopMarkings->Position.z + (2.17f * 0.32f))
-//        &&
-//        !StopMarkings->PassedObjective
-//        ) {
-//        this->Points -= 5;
-//        StopMarkings->PassedObjective = true;
-//    }
-//    else if(Car->Position.z + ((157.30f * 0.01f) / 2.0f) < StopMarkings->Position.z + (2.17f * 0.32f)) {
-//        StopMarkings->PassedObjective = false;
-//    }
+
+    
+    if (this->Points <= 0) {
+        this->Points = 0;
+    }
+    else {
+        this->Points -= scene->checkInfractions(Car->Position, Car->Velocity);
+    }
 }
 

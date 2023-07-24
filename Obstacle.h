@@ -18,6 +18,7 @@ public:
 	bool infractionCommitted = false;
 
 	Obstacle(ObstacleType obstacle, string const& path, Shader& shader, glm::vec3 pos);
+
 };
 
 #endif

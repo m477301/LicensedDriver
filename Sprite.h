@@ -16,8 +16,9 @@ public:
     unsigned int diffuseMap, specularMap, normalMap;
 
     glm::vec3 pos1, pos2, pos3, pos4;
+    glm::vec2 uv1, uv2, uv3, uv4;
     // Constructor (inits shaders/shapes)
-    Sprite(Shader& shader, glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4);
+    Sprite(Shader& shader, glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3, glm::vec2 uv4);
     // Destructor
     ~Sprite();
     // Renders a defined quad textured with given sprite

@@ -38,11 +38,15 @@ void Scene::Init()
 						glm::vec3(3.0f, 0.0f, 10.0f),
 						glm::vec3(-3.0f, 0.0f, 10.0f),
 						glm::vec3(-3.0f, 0.0f, -10.0f),
-						glm::vec3(3.0f, 0.0f, -10.0f)
+						glm::vec3(3.0f, 0.0f, -10.0f),
+						glm::vec2 (0.0f, 1.0f),
+						glm::vec2 (0.0f, 0.0f),
+						glm::vec2 (1.0f, 0.0f),
+						glm::vec2 (1.0f, 1.0f)
 					);
 
-	glm::vec3 stopSignPos = glm::vec3(0.0f, 0.0f, 5.0f);
-	this->StopSignObstacle = new StopSign(STOP_SIGN, "objects/stopsign/stopsign.obj", this->shader, stopSignPos);
+	glm::vec3 stopSignPos = glm::vec3(-2.5f, 0.0f, 5.0f);
+	this->StopSignObstacle = new StopSign(STOP_SIGN, "objects/stopsign/stopsign.obj", this->shader, this->modelShader, stopSignPos);
 
 	//// load textures
 	ResourceManager::LoadTexture("textures/road/BaseColor.png", false, "road");
@@ -62,6 +66,7 @@ void Scene::Init()
 void Scene::Update(float dt)
 {
 	// Check if any road infractions occured
+	// for all obstacles in scene check infractions
 	//this->checkInfractions();
 }
 
@@ -93,31 +98,44 @@ void Scene::Render(glm::mat4 view, glm::mat4 projection, glm::mat4 model)
 	normalRoadTexture = ResourceManager::GetTexture("road_normal");
 	this->Road->DrawSprite(diffuseRoadTexture, specularRoadTexture, normalRoadTexture, glm::vec3(0.0f, 0.0f, 0.0f));
 	ResourceManager::GetShader("shader").SetMatrix4("model", model);
-	model = glm::mat4(1.0f);
 
 	// Draw Obstcales
 	model = glm::mat4(1.0f);
-	//model = glm::translate(model, glm::vec3(0.0f));
-	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));//
-	//model = glm::translate(model, glm::vec3(StopSignObstacle->Position));
 	ResourceManager::GetShader("shader").SetMatrix4("model", model);
-	this->StopSignObstacle->Render();
+	this->StopSignObstacle->Draw();
 
 
 	// Draw Buildings
+}
 
-	//model = glm::mat4(1.0f);
-	//// draw Stop Sign
-	//model = glm::translate(model, glm::vec3(StopSign->Position)); // translate it down so it's at the center of the scene
-	//model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));	// it's a bit too big for our scene, so scale it down
-	//StopSign->Draw();
+// Check if any infractions have occured in the scene
+int Scene::checkInfractions(glm::vec3 carPosition, glm::vec3 carVelocity) {
 
-	//model = glm::mat4(1.0f);
+	// for all obstacles check infractions
+    // Check for stop sign infraction
+	int pointsLost = 0;
 
-	//// draw Stop Markings
-	//model = glm::translate(model, glm::vec3(StopMarkings->Position)); // translate it down so it's at the center of the scene
-	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
-		//model = glm::scale(model, glm::vec3(0.32f, 0.32f, 0.32f));	// it's a bit too big for our scene, so scale it down
-	//ResourceManager::GetShader("modelShader").SetMatrix4("model", model);
-	//StopMarkings->Draw();
+    if (carPosition.z + ((157.30f * 0.01f) / 2.0f) < StopSignObstacle->Position.z
+        &&
+		carPosition.z + ((157.30f * 0.01f) / 2.0f) > StopSignObstacle->Position.z - 1.5f) {
+        // check if car reduces speed to 0
+        if (carVelocity.x + carVelocity.y + carVelocity.z == 0.0f) {
+            // they stopped
+			StopSignObstacle->PassedObjective = true;
+        }
+    }
+    else if (
+        // obstacle has been passed and infraction has been committed
+        (carPosition.z + ((157.30f * 0.01f) / 2.0f) > StopSignObstacle->Position.z)
+        &&
+        !StopSignObstacle->PassedObjective
+        ) {
+		pointsLost += 5;
+		StopSignObstacle->PassedObjective = true;
+    }
+    else if(carPosition.z + ((157.30f * 0.01f) / 2.0f) < StopSignObstacle->Position.z) {
+		StopSignObstacle->PassedObjective = false;
+    }
+
+	return pointsLost;
 }

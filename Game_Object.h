@@ -23,7 +23,7 @@ public:
     GameObject();
     GameObject(string const& path, Shader &Shader, glm::vec3 pos);
     // Update Sprite
-    void Update(float deltaTime);
+    void update(float deltaTime);
     // draw sprite
     //virtual void Draw(Sprite& sprite);
     virtual void Draw();

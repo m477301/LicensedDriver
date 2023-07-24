@@ -12,8 +12,10 @@ newmtl map_CC6_001
 	Kd 0.1765 0.1765 0.1765
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka T_map_CC6_001_BaseColor.jpg
-	map_Kd T_map_CC6_001_BaseColor.jpg
+	map_Ka Car_BaseColor.jpg
+	map_Kd Car_BaseColor.jpg
+	map_Ks Car_Specular.png
+	bump Car_Normal.jpg
 
 newmtl map_Glass_CC6_01
 	Ns 73.0000
@@ -26,8 +28,10 @@ newmtl map_Glass_CC6_01
 	Kd 0.2275 0.2706 0.2941
 	Ks 0.7560 0.7560 0.7560
 	Ke 0.0000 0.0000 0.0000
-	map_Ka transparent.png
-	map_Kd transparent.png
+	map_Ka Glass_BaseColor_Transparent.png
+	map_Kd Glass_BaseColor_Transparent.png
+	map_Ks Glass_Specular.jpg
+	bump Glass_Normal.png
 
 
 newmtl map_Wheels_CC6_01
@@ -41,5 +45,7 @@ newmtl map_Wheels_CC6_01
 	Kd 0.3569 0.3569 0.3569
 	Ks 0.2070 0.2070 0.2070
 	Ke 0.0000 0.0000 0.0000
-	map_Ka T_map_Wheels_CC6_01_BaseColor.jpg
-	map_Kd T_map_Wheels_CC6_01_BaseColor.jpg
+	map_Ka Wheels_BaseColor.jpg
+	map_Kd Wheels_BaseColor.jpg
+	map_Ks Wheels_Specular.jpg
+	bump Wheels_Normal.jpg

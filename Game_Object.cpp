@@ -13,5 +13,4 @@ void GameObject::Draw()
 }
 
 
-void GameObject::Update(float deltaTime) {
-}
+void GameObject::update(float deltaTime){}

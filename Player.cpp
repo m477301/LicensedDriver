@@ -24,7 +24,7 @@ void Player::move(Movement direction, float deltaTime) {
         this->Position -= carFront * (speed);
     }
     if (direction == LEFT) {
-        this->Rotation += this->RotationSpeed * 0.5;
+        this->Rotation += this->RotationSpeed * 0.5f;
         glm::vec3 front;
         front.x = sin(glm::radians(Rotation));
         front.y = 0.0f;

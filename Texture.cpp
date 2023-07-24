@@ -19,10 +19,7 @@ void Texture2D::Generate(unsigned int width, unsigned int height, unsigned int n
         else if (this->nrComponents == 3)
             format = GL_RGB;
         else if (this->nrComponents == 4)
-        {
             format = GL_RGBA;
-            std::cout << "I came herre" << std::endl;
-        }
 
         // CREATE TEXTURE 
         glBindTexture(GL_TEXTURE_2D, this->ID);
