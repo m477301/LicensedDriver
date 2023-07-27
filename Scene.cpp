@@ -3,10 +3,9 @@
 #include <iostream>
 
 // constructor/destructor
-Scene::Scene(Shader &shader, Shader &modelShader, Shader& lightShader)
+Scene::Scene(Shader &shader, Shader &lightShader)
 {
 	this->shader = shader;
-	this->modelShader = modelShader;
 	this->lightShader = lightShader;
 	this->Init();
 }
@@ -46,9 +45,10 @@ void Scene::Init()
 					);
 
 	glm::vec3 stopSignPos = glm::vec3(-2.5f, 0.0f, 5.0f);
-	this->StopSignObstacle = new StopSign(STOP_SIGN, "objects/stopsign/stopsign.obj", this->shader, this->modelShader, stopSignPos);
+	this->StopSignObstacle = new StopSign(STOP_SIGN, "objects/stopsign/stopsign.obj", this->shader, this->shader, stopSignPos);
 
 	//// load textures
+
 	ResourceManager::LoadTexture("textures/road/BaseColor.png", false, "road");
 	ResourceManager::LoadTexture("textures/road/Specular.png", false, "road_specular");
 	ResourceManager::LoadTexture("textures/road/Normal.png", false, "road_normal");
@@ -103,8 +103,6 @@ void Scene::Render()
 	ResourceManager::GetShader("shader").SetMatrix4("model", model);
 	this->StopSignObstacle->Draw();
 
-
-	// Draw Buildings
 }
 
 // Check if any infractions have occured in the scene

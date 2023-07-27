@@ -17,13 +17,14 @@
 #include "Sprite.h"
 #include "Obstacle.h"
 #include "StopSign.h"
+#include "Skybox.h"
 
 
 class Scene
 {
 public:
     // SHADER
-    Shader shader, modelShader, lightShader;
+    Shader shader, lightShader;
 
     // OBJECTS
     Sprite* Road;
@@ -35,7 +36,7 @@ public:
 
     glm::vec3 lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
     // constructor/destructor
-    Scene(Shader& shader, Shader& modelShader, Shader& lightShader);
+    Scene(Shader& shader, Shader& lightShader);
     ~Scene();
     // initialize game state (load all shaders/textures/levels)
     void Init();

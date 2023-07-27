@@ -66,6 +66,9 @@
     <ClCompile Include="StopSign.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="default_v.txt">
@@ -90,6 +93,12 @@
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="shaders\normal_v.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\skybox_f.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\skybox_v.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
@@ -140,6 +149,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

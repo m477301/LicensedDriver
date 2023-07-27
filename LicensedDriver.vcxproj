@@ -155,6 +155,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="StopSign.cpp" />
@@ -168,6 +169,8 @@
     <Text Include="model_v.txt" />
     <Text Include="shaders\normal_f.txt" />
     <Text Include="shaders\normal_v.txt" />
+    <Text Include="shaders\skybox_f.txt" />
+    <Text Include="shaders\skybox_v.txt" />
     <Text Include="shaders\text_f.txt" />
     <Text Include="shaders\text_v.txt" />
   </ItemGroup>
@@ -183,6 +186,7 @@
     <ClInclude Include="Resource_Manager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="StopSign.h" />

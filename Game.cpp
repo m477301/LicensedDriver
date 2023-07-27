@@ -7,12 +7,16 @@
 #include "StopSign.h"
 #include "Obstacle.h"
 #include "Player.h"
+#include "Skybox.h"
 
 #include <array>
 #include <vector>
 
 // Game-related State data
 TextRenderer* Text;
+
+// Background
+Skybox* skybox;
 
 // Camera
 Camera* camera;
@@ -36,6 +40,7 @@ Game::~Game()
     delete scene;
     delete camera;
     delete Car;
+    delete skybox;
 }
 
 void Game::Init()
@@ -45,12 +50,13 @@ void Game::Init()
     Text->Load("fonts/ocraext.TTF", 24);
 
     // load shaders
-    Shader defaultShader, modelShader, lightShader;
+    Shader defaultShader, modelShader, lightShader, skyboxShader;
     defaultShader = ResourceManager::LoadShader("shaders/normal_v.txt", "shaders/normal_f.txt", nullptr, "shader");
     //modelShader = ResourceManager::LoadShader("model_v.txt", "model_f.txt", nullptr, "modelShader");
     lightShader = ResourceManager::LoadShader("shaders/lightCube_v.txt", "shaders/lightCube_f.txt", nullptr, "light_cube");
+    skyboxShader = ResourceManager::LoadShader("shaders/skybox_v.txt", "shaders/skybox_f.txt", nullptr, "skybox");
 
-    scene = new Scene(defaultShader, defaultShader, lightShader);
+    scene = new Scene(defaultShader, lightShader);
 
     glm::vec3 carPos = glm::vec3(0.0f, 0.0f, 0.0f);
     Car = new Player("objects/car/legend.obj", defaultShader, carPos);
@@ -59,6 +65,8 @@ void Game::Init()
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
     camera = new Camera(cameraPos);
 
+    // Background
+    skybox = new Skybox();
 }
 
 void Game::Update(float dt)
@@ -94,8 +102,20 @@ void Game::Render(float dt)
         ResourceManager::GetShader("shader").SetMatrix4("view", view);
         ResourceManager::GetShader("shader").SetMatrix4("model", model);
 
+
         // DRAW SCENE
         scene->Render();
+
+        model = glm::mat4(1.0f);
+        model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));
+
+        // Draw Background
+        glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+        ResourceManager::GetShader("skybox").Use().SetMatrix4("projection", projection);
+        ResourceManager::GetShader("skybox").SetMatrix4("view", view);
+        ResourceManager::GetShader("skybox").SetMatrix4("model", model);
+
+        skybox->Draw();
 
         // DRAW PLAYER
         Car->Draw(dt);
