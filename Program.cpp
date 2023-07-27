@@ -19,7 +19,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCREEN_WIDTH = 1200;
+const unsigned int SCREEN_WIDTH = 1820;
 const unsigned int SCREEN_HEIGHT = 1000;
 
 // Setup Game

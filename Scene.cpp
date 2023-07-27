@@ -95,8 +95,8 @@ void Scene::Render()
 	diffuseRoadTexture = ResourceManager::GetTexture("road");
 	specularRoadTexture = ResourceManager::GetTexture("road_specular");
 	normalRoadTexture = ResourceManager::GetTexture("road_normal");
+	ResourceManager::GetShader("shader").SetMatrix4("model", model); 
 	this->Road->DrawSprite(diffuseRoadTexture, specularRoadTexture, normalRoadTexture, glm::vec3(0.0f, 0.0f, 0.0f));
-	ResourceManager::GetShader("shader").SetMatrix4("model", model);
 
 	// Draw Obstcales
 	model = glm::mat4(1.0f);
