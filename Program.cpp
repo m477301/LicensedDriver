@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
         // ------
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        LicensedDriver.Render();
+        LicensedDriver.Render(deltaTime);
 
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

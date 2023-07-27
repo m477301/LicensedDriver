@@ -53,7 +53,7 @@ void Game::Init()
     scene = new Scene(defaultShader, defaultShader, lightShader);
 
     glm::vec3 carPos = glm::vec3(0.0f, 0.0f, 0.0f);
-    Car = new Player("objects/car/CarC6_0003.obj", defaultShader, carPos);
+    Car = new Player("objects/car/legend.obj", defaultShader, carPos);
 
     // Setup Camera
     glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -63,6 +63,7 @@ void Game::Init()
 
 void Game::Update(float dt)
 {
+
     Car->update(dt);
 
     scene->Update(dt);
@@ -70,7 +71,7 @@ void Game::Update(float dt)
     this->checkInfractions();
 }
 
-void Game::Render()
+void Game::Render(float dt)
 {
     if (this->State == GAME_ACTIVE)
     {
@@ -82,30 +83,22 @@ void Game::Render()
 
         glDepthRange(0.01, 1.0);
 
+        ResourceManager::GetShader("shader").Use().SetVector3f("viewPos", camera->Position);
 
         glm::mat4 view = camera->GetViewMatrix(Car->Position, Car->Rotation);
         // Camera Info
         glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)this->Width / (float)this->Height, 0.1f, 100.0f);
         glm::mat4 model = glm::mat4(1.0f);
 
-        ResourceManager::GetShader("shader").Use().SetVector3f("viewPos", camera->Position);
-
-        // DRAW SCENE
-
-        scene->Render(view, projection, model);
-        
-        model = glm::mat4(1.0f);
-
-        // DRAW PLAYER
         ResourceManager::GetShader("shader").Use().SetMatrix4("projection", projection);
         ResourceManager::GetShader("shader").SetMatrix4("view", view);
-
-        // draw Car
-        model = glm::translate(model, glm::vec3(Car->Position)); // translate it down so it's at the center of the scene
-        model = glm::rotate(model, glm::radians(Car->Rotation), glm::vec3(0, 1, 0));//rotation x = 0.0 degrees
-        model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));	// it's a bit too big for our scene, so scale it down
         ResourceManager::GetShader("shader").SetMatrix4("model", model);
-        Car->Draw();
+
+        // DRAW SCENE
+        scene->Render();
+
+        // DRAW PLAYER
+        Car->Draw(dt);
 
         // restore depth range
         glDepthRange(0, 1.0);
@@ -154,6 +147,12 @@ void Game::KeyboardInput(float dt)
         }
         if (this->Keys[GLFW_KEY_LEFT]) {
             Car->move(LEFT, dt);
+        }
+
+        if (!this->Keys[GLFW_KEY_UP] && !this->Keys[GLFW_KEY_DOWN])
+            Car->forwardDirection = 0;
+        if (!this->Keys[GLFW_KEY_RIGHT] && !this->Keys[GLFW_KEY_LEFT]) {
+            Car->rotationDirection = 0;
         }
     }
 }

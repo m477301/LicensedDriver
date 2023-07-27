@@ -58,7 +58,7 @@ public:
     void Init();
     // game loop
     void Update(float dt);
-    void Render();
+    void Render(float dt);
     void KeyboardInput(float dt);
     void MouseInput(float xpos, float ypose);
 

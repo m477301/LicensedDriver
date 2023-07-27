@@ -31,7 +31,7 @@ newmtl map_Glass_CC6_01
 	map_Ka Glass_BaseColor_Transparent.png
 	map_Kd Glass_BaseColor_Transparent.png
 	map_Ks Glass_Specular.jpg
-	bump Glass_Normal.png
+	bump Glass_Normal.jpg
 
 
 newmtl map_Wheels_CC6_01

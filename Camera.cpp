@@ -125,7 +125,7 @@ void Camera::updateCameraVectors()
     // calculate the new Front vector
     glm::vec3 front;
     front.z = cos(glm::radians(this->Yaw)) * cos(glm::radians(this->Pitch));
-    if (vantagePoint == INSIDE_CAR || OUTSIDE_CAR) {
+    if (vantagePoint == INSIDE_CAR || vantagePoint == OUTSIDE_CAR) {
         front.y = 0;
     }
     else if (vantagePoint == FREE_ROAMING) {

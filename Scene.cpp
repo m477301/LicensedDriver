@@ -70,8 +70,10 @@ void Scene::Update(float dt)
 	//this->checkInfractions();
 }
 
-void Scene::Render(glm::mat4 view, glm::mat4 projection, glm::mat4 model)
+void Scene::Render()
 {
+	glm::mat4 model = glm::mat4(1.0f);
+
 	// be sure to activate shader when setting uniforms/drawing objects
 //ResourceManager::GetShader("defaultShader").Use().SetVector3f("light.direction", -0.2f, -1.0f, -0.3f);
 	ResourceManager::GetShader("shader").Use().SetVector3f("lightPos", this->lightPos);
@@ -85,9 +87,6 @@ void Scene::Render(glm::mat4 view, glm::mat4 projection, glm::mat4 model)
 
 	// Material Properties
 	ResourceManager::GetShader("shader").SetFloat("material.shininess", 32.0f);
-
-	ResourceManager::GetShader("shader").SetMatrix4("projection", projection);
-	ResourceManager::GetShader("shader").SetMatrix4("view", view);
 	ResourceManager::GetShader("shader").SetMatrix4("model", model);
 
 	// draw road

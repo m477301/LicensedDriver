@@ -1,29 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 3
 
-newmtl map_Wheels_CC6_01.001
-Ns 10.000002
-Ka 1.000000 1.000000 1.000000
-Kd 0.356900 0.356900 0.356900
-Ks 0.207000 0.207000 0.207000
-Ke 0.000000 0.000000 0.000000
-Ni 1.500000
-d 1.000000
-illum 2
-map_Kd T_map_Wheels_CC6_01_BaseColor.jpg
-
-newmtl map_Glass_CC6_01.003
-Ns 882.090000
-Ka 1.000000 1.000000 1.000000
-Kd 0.767815 1.000000 1.000000
-Ks 0.756000 0.756000 0.756000
-Ke 0.000000 0.000000 0.000000
-Ni 1.500000
-d 0.520000
-illum 9
-map_Kd T_map_Wheels_CC6_01_BaseColor.jpg
-
-newmtl map_CC6_001.001
+newmtl map_CC6_001
 Ns 10.000002
 Ka 1.000000 1.000000 1.000000
 Kd 0.176500 0.176500 0.176500
@@ -32,4 +10,32 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd T_map_CC6_001_BaseColor.jpg
+map_Bump Car_Normal.jpg
+map_Kd Car_BaseColor.jpg
+map_Ks Car_Specular.png
+
+newmtl map_Wheels_CC6_01
+Ns 10.000002
+Ka 1.000000 1.000000 1.000000
+Kd 0.356900 0.356900 0.356900
+Ks 0.207000 0.207000 0.207000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Bump Wheels_Normal.jpg
+map_Kd Wheels_BaseColor.jpg
+map_Ks Wheels_Specular.jpg
+
+newmtl map_Glass_CC6_01
+Ns 72.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.227500 0.270600 0.294100
+Ks 0.756000 0.756000 0.756000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 0.520000
+illum 9
+map_Bump Glass_Normal.jpg
+map_Kd Glass_BaseColor_Transparent.png
+map_Ks Glass_Specular.jpg

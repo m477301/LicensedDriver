@@ -1,5 +1,9 @@
 #include "Model.h"
 
+Model::Model() {
+    std::cout << "Default Model Constructor" << std::endl;
+}
+
 // constructor, expects a filepath to a 3D model.
 Model::Model(string const& path, Shader& Shader, bool gamma) : gammaCorrection(gamma)
 {
