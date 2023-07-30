@@ -118,7 +118,7 @@ int Scene::checkInfractions(glm::vec3 carPosition, glm::vec3 carVelocity) {
         // check if car reduces speed to 0
         if (carVelocity.x + carVelocity.y + carVelocity.z == 0.0f) {
             // they stopped
-			StopSignObstacle->PassedObjective = true;
+			StopSignObstacle->correctManoeuvre = true;
         }
     }
     else if (
@@ -127,7 +127,9 @@ int Scene::checkInfractions(glm::vec3 carPosition, glm::vec3 carVelocity) {
         &&
         !StopSignObstacle->PassedObjective
         ) {
-		pointsLost += 5;
+		if (!StopSignObstacle->correctManoeuvre) {
+			pointsLost += 5;
+		}
 		StopSignObstacle->PassedObjective = true;
     }
     else if(carPosition.z + ((157.30f * 0.01f) / 2.0f) < StopSignObstacle->Position.z) {

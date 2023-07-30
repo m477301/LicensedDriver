@@ -28,7 +28,7 @@ Scene* scene;
 Player* Car;
 
 Game::Game(unsigned int width, unsigned int height)
-    : State(GAME_ACTIVE), Keys(), Width(width), Height(height), Points(20)
+    : State(GAME_MENU), Keys(), Width(width), Height(height), Points(20)
 {
     float lastX = width / 2.0f;
     float lastY = height / 2.0f;
@@ -76,11 +76,26 @@ void Game::Update(float dt)
     scene->Update(dt);
 
     this->checkInfractions();
+
+    if (this->State == GAME_ACTIVE && this->IsCompleted())
+    {
+        this->ResetGame();
+        this->State = GAME_WIN;
+    }
 }
 
 void Game::Render(float dt)
 {
-    if (this->State == GAME_ACTIVE)
+    if (this->State == GAME_WIN) {
+        Text->RenderText("YOU PASSED!", (this->Width / 2.0f) - (300.0f), this->Height / 2, 3.0f);
+        Text->RenderText("Press M to MENU", (this->Width / 2.0f) - (275.0f), this->Height / 2 + 80.0f, 2.0f);
+
+    }
+    if (this->State == GAME_MENU) {
+        Text->RenderText("LICENSED DRIVER", (this->Width/2.0f)-(300.0f), this->Height / 2, 3.0f);
+        Text->RenderText("Press ENTER to start", (this->Width/2.0f)-(275.0f), this->Height / 2 + 80.0f, 2.0f);
+    }
+    if (this->State == GAME_ACTIVE || this->State == GAME_MENU)
     {
         glDepthRange(0, 0.01);
 
@@ -174,6 +189,18 @@ void Game::KeyboardInput(float dt)
             Car->rotationDirection = 0;
         }
     }
+    if (this->State == GAME_MENU) {
+        if (this->Keys[GLFW_KEY_ENTER] && !this->KeysProcessed[GLFW_KEY_ENTER]) {
+            this->State = GAME_ACTIVE;
+            this->KeysProcessed[GLFW_KEY_ENTER] = true;
+        }
+    }
+    if (this->State == GAME_WIN) {
+        if (this->Keys[GLFW_KEY_M] && !this->KeysProcessed[GLFW_KEY_M]) {
+            this->State = GAME_MENU;
+            this->KeysProcessed[GLFW_KEY_M] = true;
+        }
+    }
 }
 
 void Game::MouseInput(float xpos, float ypos)
@@ -197,14 +224,36 @@ void Game::MouseInput(float xpos, float ypos)
     }
 }
 
-void Game::checkInfractions() {
+void Game::ResetGame() {
+    this->Points = 20;
+    Car->Position = glm::vec3(0.0f, 0.0f, 0.0f);
+    // Reset Camera
+    camera->vantagePoint = INSIDE_CAR;
+    camera->Front = glm::vec3(0.0f, 1.0f, 1.0f);
+    camera->Zoom = 80.0f;
 
-    
+    // Reset All Obstacles
+    scene->StopSignObstacle->correctManoeuvre = false;
+    scene->StopSignObstacle->PassedObjective = false;
+}
+
+bool Game::IsCompleted() {
+    if (scene->StopSignObstacle->correctManoeuvre && scene->StopSignObstacle->PassedObjective) {
+        return true;
+    }
+    return false;
+}
+
+void Game::checkInfractions() {
     if (this->Points <= 0) {
         this->Points = 0;
     }
     else {
         this->Points -= scene->checkInfractions(Car->Position, Car->Velocity);
+        if (this->Points <= 0) {
+            this->ResetGame();
+            this->State = GAME_MENU;
+        }
     }
 }
 

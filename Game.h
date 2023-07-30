@@ -61,6 +61,9 @@ public:
     void Render(float dt);
     void KeyboardInput(float dt);
     void MouseInput(float xpos, float ypose);
+    // Game State
+    void ResetGame();
+    bool IsCompleted();
 
 private:
     void checkInfractions();

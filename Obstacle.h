@@ -15,7 +15,7 @@ class Obstacle : public GameObject
 {
 public: 
 	bool PassedObjective = false;
-	bool infractionCommitted = false;
+	bool correctManoeuvre = false;
 
 	Obstacle(ObstacleType obstacle, string const& path, Shader& shader, glm::vec3 pos);
 

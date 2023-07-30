@@ -19,7 +19,6 @@
 #include "StopSign.h"
 #include "Skybox.h"
 
-
 class Scene
 {
 public:
