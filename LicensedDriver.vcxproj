@@ -146,7 +146,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Game_Object.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Program.cpp" />
@@ -163,12 +162,10 @@
     <ClCompile Include="Text_Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="default_f.txt" />
-    <Text Include="default_v.txt" />
-    <Text Include="model_f.txt" />
-    <Text Include="model_v.txt" />
-    <Text Include="shaders\normal_f.txt" />
-    <Text Include="shaders\normal_v.txt" />
+    <Text Include="shaders\default_f.txt" />
+    <Text Include="shaders\default_v.txt" />
+    <Text Include="shaders\lightCube_f.txt" />
+    <Text Include="shaders\lightCube_v.txt" />
     <Text Include="shaders\skybox_f.txt" />
     <Text Include="shaders\skybox_v.txt" />
     <Text Include="shaders\text_f.txt" />
@@ -179,7 +176,6 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Game_Object.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Obstacle.h" />

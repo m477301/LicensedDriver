@@ -53,6 +53,5 @@ private:
     // the required info is returned as a Texture struct.
     vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
-    //Material loadMaterial(aiMaterial* mat);
 };
 #endif

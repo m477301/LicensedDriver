@@ -70,9 +70,6 @@ int main(int argc, char* argv[])
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
 
-    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    //stbi_set_flip_vertically_on_load(true);
-
     // OpenGL configuration
     // --------------------
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -83,10 +80,6 @@ int main(int argc, char* argv[])
     // initialize game
     // ---------------
     LicensedDriver.Init();
-
-    // lighting info
-// -------------
-    //glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
 
     // render loop
     // -----------

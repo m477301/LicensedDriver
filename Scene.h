@@ -27,8 +27,10 @@ public:
 
     // OBJECTS
     Sprite* Road;
+    vector<Sprite> roads;
 
     // Obstacles
+    vector<Obstacle> obstacles;
     StopSign* StopSignObstacle;
 
     unsigned int lightCubeVAO, cubeVAO;
@@ -41,7 +43,7 @@ public:
     void Init();
     // game loop
     void Update(float dt);
-    void Render();
+    void Render(glm::vec3 carPosition);
     int checkInfractions(glm::vec3 carPosition, glm::vec3 carVelocity);
 };
 

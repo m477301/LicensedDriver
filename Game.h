@@ -8,7 +8,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//#include "Game_Level.h"
 #include <iostream>
 
 #include "Text_Renderer.h"
@@ -28,10 +27,6 @@ enum Movement {
     LEFT,
     RIGHT
 };
-
-// Initial size of the player paddle
-//const glm::vec3 ROAD_SIZE(100.0f, 100.0f,0.0f);
-//const glm::vec2 PLAYER_SIZE(100.0f, 20.0f);
 
 // Initial velocity of the player paddle
 const float ROAD_VELOCITY(0.0f);

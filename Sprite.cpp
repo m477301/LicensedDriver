@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Sprite::Sprite(Shader& shader, glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3, glm::vec2 uv4)
+Sprite::Sprite(Shader& shader, glm::vec3 pos1, glm::vec3 pos2, glm::vec3 pos3, glm::vec3 pos4, glm::vec2 uv1, glm::vec2 uv2, glm::vec2 uv3, glm::vec2 uv4) 
 {
     this->shader = shader;
     this->pos1 = pos1;
@@ -41,11 +41,6 @@ void Sprite::renderQuad()
 
     if (this->quadVAO == 0)
     {
-        //// texture coordinates
-        //glm::vec2 uv1(0.0f, 1.0f);
-        //glm::vec2 uv2(0.0f, 0.0f);
-        //glm::vec2 uv3(1.0f, 0.0f);
-        //glm::vec2 uv4(1.0f, 1.0f);
         // normal vector
         glm::vec3 nm(0.0f, 1.0f, 0.0f);
 

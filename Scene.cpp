@@ -31,18 +31,17 @@ void Scene::Init()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	Road = new Sprite
-					(
-						this->shader, 
-						glm::vec3(3.0f, 0.0f, 10.0f),
-						glm::vec3(-3.0f, 0.0f, 10.0f),
-						glm::vec3(-3.0f, 0.0f, -10.0f),
-						glm::vec3(3.0f, 0.0f, -10.0f),
-						glm::vec2 (0.0f, 1.0f),
-						glm::vec2 (0.0f, 0.0f),
-						glm::vec2 (1.0f, 0.0f),
-						glm::vec2 (1.0f, 1.0f)
-					);
+	Road = new Sprite(
+		this->shader,
+		glm::vec3(3.0f, 0.0f, 10.0f),
+		glm::vec3(-3.0f, 0.0f, 10.0f),
+		glm::vec3(-3.0f, 0.0f, -10.0f),
+		glm::vec3(3.0f, 0.0f, -10.0f),
+		glm::vec2(0.0f, 1.0f),
+		glm::vec2(0.0f, 0.0f),
+		glm::vec2(1.0f, 0.0f),
+		glm::vec2(1.0f, 1.0f)
+	);
 
 	glm::vec3 stopSignPos = glm::vec3(-2.5f, 0.0f, 5.0f);
 	this->StopSignObstacle = new StopSign(STOP_SIGN, "objects/stopsign/stopsign.obj", this->shader, this->shader, stopSignPos);
@@ -70,7 +69,7 @@ void Scene::Update(float dt)
 	//this->checkInfractions();
 }
 
-void Scene::Render()
+void Scene::Render(glm::vec3 carPosition)
 {
 	glm::mat4 model = glm::mat4(1.0f);
 
@@ -95,6 +94,7 @@ void Scene::Render()
 	diffuseRoadTexture = ResourceManager::GetTexture("road");
 	specularRoadTexture = ResourceManager::GetTexture("road_specular");
 	normalRoadTexture = ResourceManager::GetTexture("road_normal");
+	//model = glm::translate(model, glm::vec3(Road->Position.x, 0.0f,carPosition.z));
 	ResourceManager::GetShader("shader").SetMatrix4("model", model); 
 	this->Road->DrawSprite(diffuseRoadTexture, specularRoadTexture, normalRoadTexture, glm::vec3(0.0f, 0.0f, 0.0f));
 

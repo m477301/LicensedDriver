@@ -45,9 +45,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game_Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -71,34 +68,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="default_v.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="default_f.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="model_v.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="model_f.txt">
-      <Filter>Source Files</Filter>
-    </Text>
     <Text Include="shaders\text_f.txt">
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="shaders\text_v.txt">
       <Filter>Source Files</Filter>
     </Text>
-    <Text Include="shaders\normal_f.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-    <Text Include="shaders\normal_v.txt">
-      <Filter>Source Files</Filter>
-    </Text>
     <Text Include="shaders\skybox_f.txt">
       <Filter>Source Files</Filter>
     </Text>
     <Text Include="shaders\skybox_v.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\default_f.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\default_v.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\lightCube_f.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="shaders\lightCube_v.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
@@ -125,9 +116,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game_Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sprite.h">

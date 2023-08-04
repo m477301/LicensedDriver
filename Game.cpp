@@ -2,7 +2,6 @@
 #include "Resource_Manager.h"
 #include "Camera.h"
 #include "Sprite.h"
-#include "Game_Object.h"
 #include "Model.h"
 #include "StopSign.h"
 #include "Obstacle.h"
@@ -51,7 +50,7 @@ void Game::Init()
 
     // load shaders
     Shader defaultShader, modelShader, lightShader, skyboxShader;
-    defaultShader = ResourceManager::LoadShader("shaders/normal_v.txt", "shaders/normal_f.txt", nullptr, "shader");
+    defaultShader = ResourceManager::LoadShader("shaders/default_v.txt", "shaders/default_f.txt", nullptr, "shader");
     lightShader = ResourceManager::LoadShader("shaders/lightCube_v.txt", "shaders/lightCube_f.txt", nullptr, "light_cube");
     skyboxShader = ResourceManager::LoadShader("shaders/skybox_v.txt", "shaders/skybox_f.txt", nullptr, "skybox");
 
@@ -118,7 +117,7 @@ void Game::Render(float dt)
 
 
         // DRAW SCENE
-        scene->Render();
+        scene->Render(Car->Position);
 
         model = glm::mat4(1.0f);
         model = glm::scale(model, glm::vec3(100.0f, 100.0f, 100.0f));

@@ -1,11 +1,3 @@
-/*******************************************************************
-** This code is part of Breakout.
-**
-** Breakout is free software: you can redistribute it and/or modify
-** it under the terms of the CC BY 4.0 license as published by
-** Creative Commons, either version 4 of the License, or (at your
-** option) any later version.
-******************************************************************/
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
@@ -17,12 +9,6 @@
 #include "Texture.h"
 #include "Shader.h"
 
-
-// A static singleton ResourceManager class that hosts several
-// functions to load Textures and Shaders. Each loaded texture
-// and/or shader is also stored for future reference by string
-// handles. All functions and resources are static and no 
-// public constructor is defined.
 class ResourceManager
 {
 public:
